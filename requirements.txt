@@ -23,5 +23,6 @@ groq
 openai
 pandas
 plotly
+duckduckgo-search
 googlesearch-python
 pycountry
