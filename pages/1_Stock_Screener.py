@@ -244,7 +244,8 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
 
     c9,c10,c11= st.columns((1, 5, 1))
     with c9:
-      st.container("Agenti-ai data")
+      st.container():
+           st.write("Space for Agentic Container")
 
     # with c10:
     #     st.write(':blue[EPS VS Stock Price in Respective Quaters]')
