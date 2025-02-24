@@ -12,3 +12,16 @@ urllib3
 matplotlib
 langchain-community
 jugaad-data
+phidata 
+python-dotenv
+yfinance
+packaging
+duckduckgo-search
+fastapi
+uvicorn
+groq
+openai
+pandas
+plotly
+googlesearch-python
+pycountry
