@@ -243,6 +243,8 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.info("Operating Profit Margin shows company's Operating profit vs Sales or Revenue")
 
     c9,c10,c11= st.columns((1, 5, 1))
+      with c9:
+            st.container("Agenti-ai data")
 
     # with c10:
     #     st.write(':blue[EPS VS Stock Price in Respective Quaters]')
