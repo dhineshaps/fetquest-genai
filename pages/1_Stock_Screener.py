@@ -140,35 +140,36 @@ def eps_nums():
      row_list = df3.loc[[10]].values.flatten().tolist()
      heads =qtrs[1:]
      num_row = [float(i) for i in row_list[1:]]
-     cols = heads
-     for i in cols:
-            month = i.split(" ")[0]
-            years = int(i.split(" ")[1]) 
-            if month == 'Jun':
-                 mon = 6
-                 date1 = 30
-            elif month == 'Sep':
-                 mon = 9
-                 date1 = 30
-            elif month == 'Dec':
-                 mon =12
-                 date1 = 31
-            else:
-                 mon = 3
-                 date1 = 31
-            d = date(years, mon, date1)
-            daywork =  d.strftime("%A")
-            if daywork == 'Saturday':
-                nd = d - timedelta(days = 1)
-                stocks_data.append(nd)
-            elif daywork == 'Sunday':
-                nd = d - timedelta(days = 2)
-                stocks_data.append(nd)
-            else:
-                stocks_data.append(d)
-     num_row = [float(i) for i in row_list[1:]]
-     ltp_row = ltp_extraction()
-     return ltp_row, num_row, qtrs
+     # cols = heads
+     # for i in cols:
+     #        month = i.split(" ")[0]
+     #        years = int(i.split(" ")[1]) 
+     #        if month == 'Jun':
+     #             mon = 6
+     #             date1 = 30
+     #        elif month == 'Sep':
+     #             mon = 9
+     #             date1 = 30
+     #        elif month == 'Dec':
+     #             mon =12
+     #             date1 = 31
+     #        else:
+     #             mon = 3
+     #             date1 = 31
+     #        d = date(years, mon, date1)
+     #        daywork =  d.strftime("%A")
+     #        if daywork == 'Saturday':
+     #            nd = d - timedelta(days = 1)
+     #            stocks_data.append(nd)
+     #        elif daywork == 'Sunday':
+     #            nd = d - timedelta(days = 2)
+     #            stocks_data.append(nd)
+     #        else:
+     #            stocks_data.append(d)
+     # num_row = [float(i) for i in row_list[1:]]
+     # ltp_row = ltp_extraction()
+     #return ltp_row, num_row, qtrs
+      return num_row, qtrs
 
 
 def opm_nums():
@@ -214,7 +215,7 @@ def agent_ai_news(scrip):
            response = st.write_stream(as_stream(chunks))
 
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
-def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
+def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
     # c1, c2, c3 = st.columns(3)
     # with c1:
     #      st.write(f':orange[Current Market price -] {cmp} Rs')
@@ -324,6 +325,7 @@ try:
       soup = BeautifulSoup(page)
       pr_hld,qtr= promoter_holdings()
       sales,qtrs = sales_nums()
+      eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
       #ltpv,eps,qtrss= eps_nums()
       opm,qts= opm_nums()
       #print(pr_hld)
@@ -366,7 +368,7 @@ try:
       st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
       agent_ai_fin(SCRIP)
       agent_ai_news(SCRIP)
-      output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+      output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
       #agent_ai_fin(SCRIP)
 except Exception:
       traceback.print_exc()
