@@ -4,7 +4,7 @@ from phi.tools.yfinance import YFinanceTools
 from phi.tools.googlesearch import GoogleSearch
 from dotenv import load_dotenv
 import time
-from phi.tools.duckduckgo import DuckDuckGo
+#from phi.tools.duckduckgo import DuckDuckGo
 from typing import Iterator 
 from phi.run.response import RunEvent, RunResponse
 
