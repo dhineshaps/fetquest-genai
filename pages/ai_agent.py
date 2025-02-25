@@ -17,7 +17,7 @@ web_search_agent = Agent(
     model=Groq(id="llama-3.2-11b-vision-preview"),
     tools=[
         GoogleSearch(fixed_language='english', fixed_max_results=5),
-        DuckDuckGo(fixed_max_results=5)],
+         ],
     instructions=['Always include sources and verification'],
     show_tool_calls=True,
     markdown=True,
