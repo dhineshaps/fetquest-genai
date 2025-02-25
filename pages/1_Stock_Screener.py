@@ -194,7 +194,7 @@ def output_stock_data():
         #st.write(f'Industry : {industry.strip()}')
 
 def agent_ai_fin(scrip):
-      st.header(f":orange[💹 Fundamental Analyis on {SCRIP}]" ,anchor=None) 
+      st.subheader(f":orange[💹 Fundamental Analyis on {SCRIP}]" ,anchor=None) 
       query = f"Provide a fundamental analysis for {scrip+".NS"}."
       chunks = finance_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
@@ -204,7 +204,7 @@ def agent_ai_fin(scrip):
            response = st.write_stream(as_stream(chunks))
             
 def agent_ai_news(scrip):
-      st.header(f":blue[ 💡 Events about {SCRIP}]", anchor=None,)
+      st.subheader(f":blue[ 💡 Events about {SCRIP}]", anchor=None,)
       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
       chunks = web_search_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
