@@ -266,7 +266,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
-def agent_ai(scrip)
+def agent_ai(scrip):
       with st.container():    
            st.write("Space for Agentic Container" + scrip)
 
