@@ -25,4 +25,3 @@ pandas
 plotly
 googlesearch-python
 pycountry
-duckduckgo-search
