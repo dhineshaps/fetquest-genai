@@ -363,6 +363,7 @@ try:
       #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
       output_stock_data()
       #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+      st.warning('This is a warning', icon="⚠️")
       agent_ai_fin(SCRIP)
       agent_ai_news(SCRIP)
       output_display(pr_hld,qtr,sales,qtrs,opm,qts)
