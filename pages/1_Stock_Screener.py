@@ -198,7 +198,7 @@ def agent_ai_fin(scrip):
       query = f"Provide a fundamental analysis for {scrip+".NS"}."
       chunks = finance_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-      with st.container(border=True):    
+      with st.container(border=True,height=300):    
            #st.write("Space for Agentic Container " + scrip)
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
@@ -251,7 +251,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.pyplot(fig2)
         st.info("Increasing Sales or Revenue is Good Sign")
 
-    c3, c4 = st.columns(2)
+    c3,c4,c5 = st.columns(3)
     
     # with c7:
     #     st.write(':blue[Earning Per Share]')
@@ -264,7 +264,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     st.pyplot(fig3)
     #     st.info("Increasing in EPS is good sign")
     
-    with c3:
+    with c4:
         st.write(':blue[Operating Profit Margin]')
         fig4, ax4= plot.subplots(figsize=(12,3.5))
         x3 =  qts[1:]
