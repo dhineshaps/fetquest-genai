@@ -251,18 +251,18 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.pyplot(fig2)
         st.info("Increasing Sales or Revenue is Good Sign")
 
-    c3,c4,c5 = st.columns(3)
+    c3,c4  = st.columns(2)
     
-    # with c7:
-    #     st.write(':blue[Earning Per Share]')
-    #     fig3, ax3= plot.subplots(figsize=(12,3.5))
-    #     x2 =  qtrss[1:]
-    #     y2 = eps
-    #     ax3.stem(x2, y2)
-    #     plot.xlabel("Quaters")
-    #     plot.ylabel("EPS in Rs.")
-    #     st.pyplot(fig3)
-    #     st.info("Increasing in EPS is good sign")
+    with c3:
+        st.write(':blue[Earning Per Share]')
+        fig3, ax3= plot.subplots(figsize=(12,3.5))
+        x2 =  qtrss[1:]
+        y2 = eps
+        ax3.stem(x2, y2)
+        plot.xlabel("Quaters")
+        plot.ylabel("EPS in Rs.")
+        st.pyplot(fig3)
+        st.info("Increasing in EPS is good sign")
     
     with c4:
         st.write(':blue[Operating Profit Margin]')
