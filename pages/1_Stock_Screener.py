@@ -180,6 +180,19 @@ def opm_nums():
      print(num_row)
      return num_row, qtrs
 
+def output_stock_data():
+      c1, c2, c3 = st.columns(3)
+    with c1:
+         st.write(f':orange[Current Market price -] {cmp} Rs')
+         st.write(f':orange[Market Capitilization -] {market_cap} Cr')
+    with c2:
+        st.write(f':orange[P/E -] {PE}')
+        st.write(f':orange[Book Value -] {BV}')
+    with c3:
+        st.write(f':orange[P/B ratio -] {PB_Ratio}')
+        st.write(f':orange[Sector -] {sector.strip()}')
+        #st.write(f'Industry : {industry.strip()}')
+
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
 def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     c1, c2, c3 = st.columns(3)
@@ -328,9 +341,10 @@ try:
             for i in x:
                 industry = i 
       #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
+      output_stock_data()
       output_display(pr_hld,qtr,sales,qtrs,opm,qts)
-      agent_ai_news(SCRIP)
-      agent_ai_fin(SCRIP)
+      #agent_ai_news(SCRIP)
+      #agent_ai_fin(SCRIP)
 except Exception:
       traceback.print_exc()
       print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
