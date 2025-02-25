@@ -360,6 +360,7 @@ try:
       output_stock_data()
       #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
       agent_ai_news(SCRIP)
+      agent_ai_fin(SCRIP)
       output_display(pr_hld,qtr,sales,qtrs,opm,qts)
       #agent_ai_fin(SCRIP)
 except Exception:
