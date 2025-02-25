@@ -12,7 +12,6 @@ urllib3
 matplotlib
 langchain-community
 jugaad-data
-pyduckduckgo
 phidata 
 python-dotenv
 yfinance
