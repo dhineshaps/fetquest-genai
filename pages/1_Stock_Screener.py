@@ -195,18 +195,18 @@ def output_stock_data():
 
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
 def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
-    c1, c2, c3 = st.columns(3)
-    with c1:
-         st.write(f':orange[Current Market price -] {cmp} Rs')
-         st.write(f':orange[Market Capitilization -] {market_cap} Cr')
-    with c2:
-        st.write(f':orange[P/E -] {PE}')
-        st.write(f':orange[Book Value -] {BV}')
-    with c3:
-        st.write(f':orange[P/B ratio -] {PB_Ratio}')
-        st.write(f':orange[Sector -] {sector.strip()}')
-        #st.write(f'Industry : {industry.strip()}')
-    c4, c5 = st.columns(2)
+    # c1, c2, c3 = st.columns(3)
+    # with c1:
+    #      st.write(f':orange[Current Market price -] {cmp} Rs')
+    #      st.write(f':orange[Market Capitilization -] {market_cap} Cr')
+    # with c2:
+    #     st.write(f':orange[P/E -] {PE}')
+    #     st.write(f':orange[Book Value -] {BV}')
+    # with c3:
+    #     st.write(f':orange[P/B ratio -] {PB_Ratio}')
+    #     st.write(f':orange[Sector -] {sector.strip()}')
+    #     #st.write(f'Industry : {industry.strip()}')
+    # c4, c5 = st.columns(2)
 
     with c4:
         st.write(':blue[Share Holding Pattern]')
