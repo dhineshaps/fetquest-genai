@@ -1,5 +1,5 @@
 import streamlit as st
-from typing import Iterator  # ✅ Fix 1: Import Iterator
+from typing import Iterator 
 from phi.agent import Agent
 from phi.model.groq import Groq
 #from phi.tools.duckduckgo import DuckDuckGo
@@ -12,13 +12,18 @@ from phi.tools.yfinance import YFinanceTools
 web_search_agent = Agent(
     name="Web Agent",
     description="Searches the web for information",
-    role="Search the web",
+    role="Search the web as Equity Research Analyst ",
     model=Groq(id="llama-3.2-11b-vision-preview"),
     tools=[
         GoogleSearch(fixed_language='english', fixed_max_results=5)
         #DuckDuckGo(fixed_max_results=5)
     ],
-    instructions="Always include the sources",
+    #instructions="Always include the sources",
+     instructions=[
+    "For a given topic, search for the top 5 links.",
+    "Then read each URL and extract the article text.",
+    "Analyse and prepare 3-5 bullet points based on the information.",
+   ],
     show_tool_calls=True,
     markdown=True,
 )
