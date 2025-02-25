@@ -266,12 +266,19 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
-def agent_ai(scrip):
+def agent_ai_fin(scrip):
       query = f"Provide a fundamental analysis for {scrip+".NS"}."
-      chunks = multi_ai_agent.run(query, stream=True)
+      chunks = finance_agent.run(query, stream=True)
       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
       with st.container():    
            st.write("Space for Agentic Container " + scrip)
+           response = st.write_stream(filtered_chunks)
+def agent_ai_news(scrip):
+      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+      chunks = web_search_agent.run(query, stream=True)
+      filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
+      with st.container():    
+           st.write("Space for Agentic Container web " + scrip)
            response = st.write_stream(filtered_chunks)
 
 
@@ -322,7 +329,8 @@ try:
                 industry = i 
       #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
       output_display(pr_hld,qtr,sales,qtrs,opm,qts)
-      agent_ai(SCRIP)
+      agent_ai_news(SCRIP)
+      agent_ai_fin(SCRIP)
 except Exception:
       traceback.print_exc()
       print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
