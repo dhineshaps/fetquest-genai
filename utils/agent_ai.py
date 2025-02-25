@@ -2,6 +2,11 @@ import streamlit as st
 from typing import Iterator 
 from phi.agent import Agent
 from phi.model.groq import Groq
+try:
+    import duckduckgo_search
+except ImportError:
+    subprocess.run(["pip", "install", "duckduckgo-search"])
+import duckduckgo_search  # Try importing again after installing
 from phi.tools.duckduckgo import DuckDuckGo
 from phi.run.response import RunEvent, RunResponse
 from phi.tools.googlesearch import GoogleSearch
