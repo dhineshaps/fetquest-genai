@@ -8,7 +8,7 @@ from PIL import Image
 from datetime import date
 from jugaad_data.nse import stock_df
 from datetime import timedelta
-
+from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="Stock_Data", page_icon = im,layout="wide")
@@ -242,10 +242,8 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.pyplot(fig4)
         st.info("Operating Profit Margin shows company's Operating profit vs Sales or Revenue")
 
-    c9,c10,c11= st.columns((1, 5, 1))
-    with c9:
-      with st.container():    
-           st.write("Space for Agentic Container")
+    #c9,c10,c11= st.columns((1, 5, 1))
+    #with c9:
 
     # with c10:
     #     st.write(':blue[EPS VS Stock Price in Respective Quaters]')
@@ -268,6 +266,9 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
+def agent_ai(scrip)
+      with st.container():    
+           st.write("Space for Agentic Container" + scrip)
 
 
 if(SCRIP):
@@ -317,6 +318,7 @@ try:
                 industry = i 
       #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
       output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+      agent_ai(SCRIP)
 except Exception:
       traceback.print_exc()
       print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
