@@ -206,7 +206,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     st.write(f':orange[P/B ratio -] {PB_Ratio}')
     #     st.write(f':orange[Sector -] {sector.strip()}')
     #     #st.write(f'Industry : {industry.strip()}')
-    # c4, c5 = st.columns(2)
+    c4, c5 = st.columns(2)
 
     with c4:
         st.write(':blue[Share Holding Pattern]')
