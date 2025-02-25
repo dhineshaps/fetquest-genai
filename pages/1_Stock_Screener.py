@@ -267,8 +267,12 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
 def agent_ai(scrip):
+      query = f"Provide a fundamental analysis for {scrip}."
+      chunks = web_search_agent.run(prompt, stream=True)
+      filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
       with st.container():    
            st.write("Space for Agentic Container" + scrip)
+           response = st.write_stream(filtered_chunks)
 
 
 if(SCRIP):
