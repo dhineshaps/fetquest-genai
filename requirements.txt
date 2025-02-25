@@ -16,7 +16,7 @@ phidata
 python-dotenv
 yfinance
 packaging
---upgrade --force-reinstall duckduckgo-search
+duckduckgo-search
 fastapi
 uvicorn
 groq
