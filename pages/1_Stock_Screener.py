@@ -267,7 +267,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
 def agent_ai(scrip):
-      query = f"Provide a fundamental analysis for {scrip} + ".NS" ."
+      query = f"Provide a fundamental analysis for {scrip+".NS"}."
       chunks = finance_agent.run(query, stream=True)
       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
       with st.container():    
