@@ -181,7 +181,7 @@ def opm_nums():
      return num_row, qtrs
 
 def output_stock_data():
-      c1, c2, c3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
     with c1:
          st.write(f':orange[Current Market price -] {cmp} Rs')
          st.write(f':orange[Market Capitilization -] {market_cap} Cr')
