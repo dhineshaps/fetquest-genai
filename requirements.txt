@@ -16,7 +16,7 @@ phidata
 python-dotenv
 yfinance
 packaging
-duckduckgo-search
+duckduckgo-search==7.1.1
 fastapi
 uvicorn
 groq
