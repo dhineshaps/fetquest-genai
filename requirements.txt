@@ -1,4 +1,5 @@
 duckduckgo-search
+newspaper4k
 streamlit
 google-generativeai
 python-dotenv
