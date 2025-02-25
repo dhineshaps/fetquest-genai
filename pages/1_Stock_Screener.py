@@ -204,7 +204,7 @@ def agent_ai_fin(scrip):
 def agent_ai_news(scrip):
       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
       chunks = web_search_agent.run(query, stream=True)
-      filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
+      filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
       with st.container():    
            st.write("Space for Agentic Container web " + scrip)
            response = st.write_stream(filtered_chunks)
