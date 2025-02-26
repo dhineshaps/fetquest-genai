@@ -26,3 +26,5 @@ pycountry
 duckduckgo-search
 newspaper4k
 streamlit
+duckduckgo-search
+
