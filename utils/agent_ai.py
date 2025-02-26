@@ -1,7 +1,6 @@
-import subprocess
-subprocess.run(["pip", "install", "--upgrade", "duckduckgo-search"])
 import streamlit as st
 import pandas as pd
+from typing import Iterator
 from datetime import datetime, timedelta
 from phi.agent.agent import Agent
 from phi.model.groq import Groq
