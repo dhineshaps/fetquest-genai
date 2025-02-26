@@ -56,7 +56,7 @@ multi_ai_agent = Agent(
     markdown=True
 )
 
-def as_stream(response) -> Iterator[str]:
+def as_stream(response):
     """Yields AI-generated responses as a stream."""
     for chunk in response:
         if isinstance(chunk, RunResponse) and isinstance(chunk.content, str):
