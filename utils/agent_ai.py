@@ -7,7 +7,7 @@ from phi.agent.agent import Agent
 from phi.model.groq import Groq
 from phi.run.response import RunEvent, RunResponse
 from phi.tools.yfinance import YFinanceTools
-#from phi.tools.duckduckgo import DuckDuckGo
+from phi.tools.duckduckgo import *
 from duckduckgo_search import *
 from phi.tools.googlesearch import GoogleSearch
 
