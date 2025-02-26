@@ -1,3 +1,5 @@
+import subprocess
+subprocess.run(["pip", "install", "--upgrade", "duckduckgo-search"])
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
