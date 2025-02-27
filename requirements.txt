@@ -15,3 +15,5 @@ pycountry
 urllib3
 matplotlib
 langchain-community
+google-generativeai
+langchain
