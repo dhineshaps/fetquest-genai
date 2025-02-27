@@ -43,7 +43,7 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 st.info("Chatbot is powered by Google Gemini Pro and have trained Data till Sep 2021")
 ## FUNCTION TO LOAD Gemini Pro model and get response
 
-model = genai.GenerativeModel("gemini-pro")  #for text - gemini pro
+model = genai.GenerativeModel("gemini-1.5-pro-latest")  #for text - gemini pro
 
 def get_gemini_response(question):
 

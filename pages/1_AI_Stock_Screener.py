@@ -6,9 +6,9 @@ from urllib.request import urlopen, Request
 import traceback
 from PIL import Image
 from datetime import date
-from jugaad_data.nse import stock_df
+#from jugaad_data.nse import stock_df
 from datetime import timedelta
-
+from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="Stock_Data", page_icon = im,layout="wide")
@@ -50,7 +50,7 @@ PB_Ratio= 0.0
 stocks_data = []
 LTP = []
 
-df = pd.read_csv('/mount/src/genai-gemini-learning/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
+df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
 col_one_list = df['Symbol'].tolist()
 
 SCRIP = st.selectbox(
@@ -140,35 +140,36 @@ def eps_nums():
      row_list = df3.loc[[10]].values.flatten().tolist()
      heads =qtrs[1:]
      num_row = [float(i) for i in row_list[1:]]
-     cols = heads
-     for i in cols:
-            month = i.split(" ")[0]
-            years = int(i.split(" ")[1]) 
-            if month == 'Jun':
-                 mon = 6
-                 date1 = 30
-            elif month == 'Sep':
-                 mon = 9
-                 date1 = 30
-            elif month == 'Dec':
-                 mon =12
-                 date1 = 31
-            else:
-                 mon = 3
-                 date1 = 31
-            d = date(years, mon, date1)
-            daywork =  d.strftime("%A")
-            if daywork == 'Saturday':
-                nd = d - timedelta(days = 1)
-                stocks_data.append(nd)
-            elif daywork == 'Sunday':
-                nd = d - timedelta(days = 2)
-                stocks_data.append(nd)
-            else:
-                stocks_data.append(d)
-     num_row = [float(i) for i in row_list[1:]]
-     ltp_row = ltp_extraction()
-     return ltp_row, num_row, qtrs
+     # cols = heads
+     # for i in cols:
+     #        month = i.split(" ")[0]
+     #        years = int(i.split(" ")[1]) 
+     #        if month == 'Jun':
+     #             mon = 6
+     #             date1 = 30
+     #        elif month == 'Sep':
+     #             mon = 9
+     #             date1 = 30
+     #        elif month == 'Dec':
+     #             mon =12
+     #             date1 = 31
+     #        else:
+     #             mon = 3
+     #             date1 = 31
+     #        d = date(years, mon, date1)
+     #        daywork =  d.strftime("%A")
+     #        if daywork == 'Saturday':
+     #            nd = d - timedelta(days = 1)
+     #            stocks_data.append(nd)
+     #        elif daywork == 'Sunday':
+     #            nd = d - timedelta(days = 2)
+     #            stocks_data.append(nd)
+     #        else:
+     #            stocks_data.append(d)
+     # num_row = [float(i) for i in row_list[1:]]
+     # ltp_row = ltp_extraction()
+     #return ltp_row, num_row, qtrs
+     return num_row, qtrs
 
 
 def opm_nums():
@@ -180,8 +181,7 @@ def opm_nums():
      print(num_row)
      return num_row, qtrs
 
-#def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
-def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
+def output_stock_data():
     c1, c2, c3 = st.columns(3)
     with c1:
          st.write(f':orange[Current Market price -] {cmp} Rs')
@@ -193,9 +193,43 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.write(f':orange[P/B ratio -] {PB_Ratio}')
         st.write(f':orange[Sector -] {sector.strip()}')
         #st.write(f'Industry : {industry.strip()}')
-    c4, c5 = st.columns(2)
 
-    with c4:
+def agent_ai_fin(scrip):
+      st.subheader(f":orange[💹 Fundamental Analyis on {SCRIP}]" ,anchor=None) 
+      query = f"Provide a fundamental analysis for {scrip+".NS"}."
+      chunks = finance_agent.run(query, stream=True)
+      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
+      with st.container(border=True,height=400):    
+           #st.write("Space for Agentic Container " + scrip)
+           #response = st.write_stream(filtered_chunks)
+           response = st.write_stream(as_stream(chunks))
+            
+def agent_ai_news(scrip):
+      st.subheader(f":blue[ 💡 Events about {SCRIP}]", anchor=None,)
+      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+      chunks = web_search_agent.run(query, stream=True)
+      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
+      with st.container(border=True,height=400):    
+           #st.write("Space for Agentic Container web " + scrip)
+           #response = st.write_stream(filtered_chunks)
+           response = st.write_stream(as_stream(chunks))
+
+#def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
+def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
+    # c1, c2, c3 = st.columns(3)
+    # with c1:
+    #      st.write(f':orange[Current Market price -] {cmp} Rs')
+    #      st.write(f':orange[Market Capitilization -] {market_cap} Cr')
+    # with c2:
+    #     st.write(f':orange[P/E -] {PE}')
+    #     st.write(f':orange[Book Value -] {BV}')
+    # with c3:
+    #     st.write(f':orange[P/B ratio -] {PB_Ratio}')
+    #     st.write(f':orange[Sector -] {sector.strip()}')
+    #     #st.write(f'Industry : {industry.strip()}')
+    c1, c2 = st.columns(2)
+
+    with c1:
         st.write(':blue[Share Holding Pattern]')
         x = pr_hld['Type']
         y = pr_hld[qtr]
@@ -205,7 +239,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         plot.ylabel("in %")
         st.pyplot(fig)
         st.info("Higher the Promoter Holding, Higher the Trust in the Company by Owners, however some exception are there" )
-    with c5:        
+    with c2:        
         st.write(':blue[Quaterly Sales or Revenue of the company]')
         x1 = sales
         y1 = qtrs[1:]
@@ -218,20 +252,20 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.pyplot(fig2)
         st.info("Increasing Sales or Revenue is Good Sign")
 
-    c7, c8 = st.columns(2)
+    c3,c4  = st.columns(2)
     
-    # with c7:
-    #     st.write(':blue[Earning Per Share]')
-    #     fig3, ax3= plot.subplots(figsize=(12,3.5))
-    #     x2 =  qtrss[1:]
-    #     y2 = eps
-    #     ax3.stem(x2, y2)
-    #     plot.xlabel("Quaters")
-    #     plot.ylabel("EPS in Rs.")
-    #     st.pyplot(fig3)
-    #     st.info("Increasing in EPS is good sign")
+    with c3:
+        st.write(':blue[Earning Per Share]')
+        fig3, ax3= plot.subplots(figsize=(12,3.5))
+        x2 =  qtrss[1:]
+        y2 = eps
+        ax3.stem(x2, y2)
+        plot.xlabel("Quaters")
+        plot.ylabel("EPS in Rs.")
+        st.pyplot(fig3)
+        st.info("Increasing in EPS is good sign")
     
-    with c7:
+    with c4:
         st.write(':blue[Operating Profit Margin]')
         fig4, ax4= plot.subplots(figsize=(12,3.5))
         x3 =  qts[1:]
@@ -242,7 +276,8 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
         st.pyplot(fig4)
         st.info("Operating Profit Margin shows company's Operating profit vs Sales or Revenue")
 
-    c9,c10,c11= st.columns((1, 5, 1))
+    #c9,c10,c11= st.columns((1, 5, 1))
+    #with c9:
 
     # with c10:
     #     st.write(':blue[EPS VS Stock Price in Respective Quaters]')
@@ -265,6 +300,20 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
+# def agent_ai_fin(scrip):
+#       query = f"Provide a fundamental analysis for {scrip+".NS"}."
+#       chunks = finance_agent.run(query, stream=True)
+#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
+#       with st.container():    
+#            st.write("Space for Agentic Container " + scrip)
+#            response = st.write_stream(filtered_chunks)
+# def agent_ai_news(scrip):
+#       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+#       chunks = web_search_agent.run(query, stream=True)
+#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
+#       with st.container():    
+#            st.write("Space for Agentic Container web " + scrip)
+#            response = st.write_stream(filtered_chunks)
 
 
 if(SCRIP):
@@ -276,6 +325,7 @@ try:
       soup = BeautifulSoup(page)
       pr_hld,qtr= promoter_holdings()
       sales,qtrs = sales_nums()
+      eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
       #ltpv,eps,qtrss= eps_nums()
       opm,qts= opm_nums()
       #print(pr_hld)
@@ -313,7 +363,14 @@ try:
             for i in x:
                 industry = i 
       #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
-      output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+      output_stock_data()
+      #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+      st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
+      agent_ai_fin(SCRIP)
+      agent_ai_news(SCRIP)
+      st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
+      output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
+      #agent_ai_fin(SCRIP)
 except Exception:
       traceback.print_exc()
       print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')

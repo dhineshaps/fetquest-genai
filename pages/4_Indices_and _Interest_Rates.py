@@ -54,7 +54,7 @@ st.divider()
 st.header(":violet[Government Investment Intruments and Interest Rates]",anchor=False)
 colnames = ['Investment Scheme', 'Interest Rate','Benefits', 'Lock-in Period', 'Minimum Investment','Maximum Investment']
 
-df = pd.read_csv('/mount/src/genai-gemini-learning/investment_int_rates.csv', names=colnames)
+df = pd.read_csv('/mount/src/fetquest-genai/investment_int_rates.csv', names=colnames)
 st.info("Feel Free to drag and create filter over the table")
 AgGrid(df)
 st.warning("Interest Rate are not fixed and periodically changed by the Government, Please act on it accordingly")

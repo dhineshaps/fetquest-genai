@@ -37,7 +37,7 @@ load_dotenv() ##loading all the environment variables
 
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
-model = genai.GenerativeModel("gemini-pro-vision")  #for image - gemini pro
+model = genai.GenerativeModel("gemini-1.5-flash")  #for image - gemini pro
 
 def get_gemini_response(input,image):
 
