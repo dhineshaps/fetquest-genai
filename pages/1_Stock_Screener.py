@@ -6,7 +6,7 @@ from urllib.request import urlopen, Request
 import traceback
 from PIL import Image
 from datetime import date
-from jugaad_data.nse import stock_df
+#from jugaad_data.nse import stock_df
 from datetime import timedelta
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
