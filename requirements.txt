@@ -27,3 +27,4 @@ duckduckgo-search
 newspaper4k
 streamlit
 duckduckgo-search
+faiss-gpu
