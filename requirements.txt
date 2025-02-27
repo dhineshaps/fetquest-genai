@@ -24,3 +24,4 @@ nsepython
 python-dotenv
 langchain
 PyPDF2
+jugaad-data
