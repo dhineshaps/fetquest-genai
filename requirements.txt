@@ -12,3 +12,6 @@ pandas
 plotly
 googlesearch-python
 pycountry
+urllib3
+matplotlib
+langchain-community
