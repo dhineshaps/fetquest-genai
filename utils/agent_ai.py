@@ -18,8 +18,8 @@ web_search_agent = Agent(
     role="Search the web as Equity Research Analyst ",
     model=Groq(id="llama-3.2-11b-vision-preview"),
     tools=[
-        GoogleSearch(fixed_language='english', fixed_max_results=5)
-        #DuckDuckGo(fixed_max_results=5)
+        GoogleSearch(fixed_language='english', fixed_max_results=5),
+        DuckDuckGo(fixed_max_results=5)
     ],
     #instructions="Always include the sources",
      instructions=[
