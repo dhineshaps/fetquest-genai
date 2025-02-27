@@ -20,7 +20,6 @@ web_search_agent = Agent(
     tools=[
         DuckDuckGo(fixed_max_results=5),
         GoogleSearch(fixed_language='english', fixed_max_results=5)
-        )
     ],
     #instructions="Always include the sources",
      instructions=[
