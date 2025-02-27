@@ -11,3 +11,10 @@ fastapi
 plotly 
 pycountry 
 openai
+packaging
+python-dotenv
+langchain-community
+urllib3
+matplotlib
+streamlit-aggrid
+streamlit-extras
