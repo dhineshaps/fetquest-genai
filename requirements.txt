@@ -5,3 +5,9 @@ streamlit
 googlesearch-python
 pandas
 yfinance
+groq
+uvicorn
+fastapi
+plotly 
+pycountry 
+openai
