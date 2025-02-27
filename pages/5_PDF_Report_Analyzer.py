@@ -81,7 +81,7 @@ def get_conversational_chain():
     Answer:
     """
 
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest",
+    model = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
                              temperature=0.3)
 
     prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
@@ -92,7 +92,7 @@ def get_conversational_chain():
 def user_input(user_question):
     embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     
-    new_db = FAISS.load_local("faiss_index", embeddings,allow_dangerous_deserialization=True)
+    new_db = FAISS.load_local("faiss_index", embeddings)
     docs = new_db.similarity_search(user_question)
 
     chain = get_conversational_chain()
@@ -108,8 +108,8 @@ def user_input(user_question):
 def main():
     user_question = st.text_input(":blue[_Ask a Question from the PDF File_]")
 
-    if user_question:
-        user_input(user_question)
+    # if user_question:
+    #     user_input(user_question)
 
     pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
     if st.button(":green[Submit & Process]"):
@@ -118,6 +118,9 @@ def main():
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks)
                 st.success("Done")
+
+    if user_question:
+        user_input(user_question)
 
 if __name__ == "__main__":
     main()
