@@ -199,7 +199,7 @@ def agent_ai_fin(scrip):
       query = f"Provide a fundamental analysis for {scrip+".NS"}."
       chunks = finance_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-      with st.container(border=True,height=300):    
+      with st.container(border=True,height=600):    
            #st.write("Space for Agentic Container " + scrip)
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
@@ -209,7 +209,7 @@ def agent_ai_news(scrip):
       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
       chunks = web_search_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
-      with st.container(border=True):    
+      with st.container(border=True,height=600):    
            #st.write("Space for Agentic Container web " + scrip)
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
