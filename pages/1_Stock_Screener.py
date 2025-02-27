@@ -368,6 +368,7 @@ try:
       st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
       agent_ai_fin(SCRIP)
       agent_ai_news(SCRIP)
+      st.subheader(f":orange[{SCRIP} Performance in chart]" ,anchor=None) 
       output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
       #agent_ai_fin(SCRIP)
 except Exception:
