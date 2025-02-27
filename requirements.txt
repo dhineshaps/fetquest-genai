@@ -21,3 +21,6 @@ streamlit-extras
 faiss-cpu
 langchain_google_genai
 nsepython
+python-dotenv
+langchain
+PyPDF2
