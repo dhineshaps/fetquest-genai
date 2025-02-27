@@ -23,3 +23,17 @@ faiss-cpu
 langchain_google_genai
 streamlit-aggrid
 streamlit-extras
+streamlit
+google-generativeai
+python-dotenv
+langchain
+PyPDF2
+faiss-cpu
+langchain_google_genai
+nsepython
+streamlit-aggrid
+streamlit-extras
+urllib3
+matplotlib
+langchain-community
+jugaad-data
