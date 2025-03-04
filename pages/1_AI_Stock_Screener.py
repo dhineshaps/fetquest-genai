@@ -51,7 +51,7 @@ stocks_data = []
 LTP = []
 
 df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-col_one_list = df['Symbol'].tolist()
+col_one_list = df['SYMBOL'].tolist()
 
 SCRIP = st.selectbox(
    "Enter the Stock Symbol",
