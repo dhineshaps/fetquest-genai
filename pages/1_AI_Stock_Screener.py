@@ -246,17 +246,6 @@ def agent_ai_news(scrip):
 
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
 def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
-    # c1, c2, c3 = st.columns(3)
-    # with c1:
-    #      st.write(f':orange[Current Market price -] {cmp} Rs')
-    #      st.write(f':orange[Market Capitilization -] {market_cap} Cr')
-    # with c2:
-    #     st.write(f':orange[P/E -] {PE}')
-    #     st.write(f':orange[Book Value -] {BV}')
-    # with c3:
-    #     st.write(f':orange[P/B ratio -] {PB_Ratio}')
-    #     st.write(f':orange[Sector -] {sector.strip()}')
-    #     #st.write(f'Industry : {industry.strip()}')
     c1, c2 = st.columns(2)
 
     with c1:
@@ -330,20 +319,6 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
-# def agent_ai_fin(scrip):
-#       query = f"Provide a fundamental analysis for {scrip+".NS"}."
-#       chunks = finance_agent.run(query, stream=True)
-#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-#       with st.container():    
-#            st.write("Space for Agentic Container " + scrip)
-#            response = st.write_stream(filtered_chunks)
-# def agent_ai_news(scrip):
-#       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
-#       chunks = web_search_agent.run(query, stream=True)
-#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-#       with st.container():    
-#            st.write("Space for Agentic Container web " + scrip)
-#            response = st.write_stream(filtered_chunks)
 
 if(proceed):
     if SCRIP is None:
