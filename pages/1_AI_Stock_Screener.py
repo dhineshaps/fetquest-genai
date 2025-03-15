@@ -66,7 +66,8 @@ df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken fro
 col_one_list = df['SYMBOL'].tolist()
 
 with st.sidebar: 
-    st.header("Stock Selection & Date Range")
+
+    st.header(":green[Select Stock & Date Range to get returns over the period]")
     
     SCRIP = st.selectbox(
         "Select the Stock Symbol",
@@ -76,8 +77,9 @@ with st.sidebar:
     )
 
     start_date = st.date_input("Start Date", value=pd.to_datetime("2023-01-01"))
-    end_date = st.date_input("End Date", value=pd.to_datetime("2024-03-08"))
-    proceed = st.button("Proceed")
+    end_date = st.date_input("End Date", value=pd.to_datetime(today))
+    proceed = st.button("Proceed",type="primary")
+
     st.divider()
     st.markdown(":blue[Services:]")
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
@@ -343,64 +345,64 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
 #            st.write("Space for Agentic Container web " + scrip)
 #            response = st.write_stream(filtered_chunks)
 
+if(proceed):
+    if(SCRIP):
+        link = f'https://www.screener.in/company/{SCRIP}'
+        hdr = {'User-Agent':'Mozilla/5.0'}
+        req = Request(link,headers=hdr)
+    try:
+        page=urlopen(req)
+        soup = BeautifulSoup(page)
+        pr_hld,qtr= promoter_holdings()
+        sales,qtrs = sales_nums()
+        eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
+        #ltpv,eps,qtrss= eps_nums()
+        opm,qts= opm_nums()
+        #print(pr_hld)
+        #print("Quater is "+qtr)
+        #print(sales)
+        div_html = soup.find('div',{'class': 'company-ratios'})
+        ul_html = div_html.find('ul',{'id': 'top-ratios'})
+        for li in ul_html.find_all("li"):
+            name_span = li.find('span',{'class':'name'})
+            if 'Market Cap' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                market_cap = float(num_span) if (num_span != '') else 0.0
+            if ' Current Price' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                cmp = float(num_span) if (num_span != '') else 0.0
+            if ' Stock P/E' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                PE = float(num_span) if (num_span != '') else 0.0
+            if ' Book Value' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                BV = float(num_span) if (num_span != '') else 0.0
+        PB_Ratio = (round(cmp/BV,2))
 
-if(SCRIP):
-       link = f'https://www.screener.in/company/{SCRIP}'
-       hdr = {'User-Agent':'Mozilla/5.0'}
-       req = Request(link,headers=hdr)
-try:
-      page=urlopen(req)
-      soup = BeautifulSoup(page)
-      pr_hld,qtr= promoter_holdings()
-      sales,qtrs = sales_nums()
-      eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
-      #ltpv,eps,qtrss= eps_nums()
-      opm,qts= opm_nums()
-      #print(pr_hld)
-      #print("Quater is "+qtr)
-      #print(sales)
-      div_html = soup.find('div',{'class': 'company-ratios'})
-      ul_html = div_html.find('ul',{'id': 'top-ratios'})
-      for li in ul_html.find_all("li"):
-         name_span = li.find('span',{'class':'name'})
-         if 'Market Cap' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               market_cap = float(num_span) if (num_span != '') else 0.0
-         if ' Current Price' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               cmp = float(num_span) if (num_span != '') else 0.0
-         if ' Stock P/E' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               PE = float(num_span) if (num_span != '') else 0.0
-         if ' Book Value' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               BV = float(num_span) if (num_span != '') else 0.0
-      PB_Ratio = (round(cmp/BV,2))
-
-      div_html1 = soup.find('div',{'class': 'flex flex-space-between'})
-      ul_html1 = div_html1.find('p')
-      for idx, x in enumerate (ul_html1):
-        if(idx == 1):
-            for i in x:
-                sector = i
-        if(idx == 5):
-            for i in x:
-                industry = i 
-      #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
-      output_stock_data()
-      #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
-      st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
-      agent_ai_fin(SCRIP)
-      agent_ai_news(SCRIP)
-      st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
-      output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
-      #agent_ai_fin(SCRIP)
-except Exception:
-      traceback.print_exc()
-      print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
+        div_html1 = soup.find('div',{'class': 'flex flex-space-between'})
+        ul_html1 = div_html1.find('p')
+        for idx, x in enumerate (ul_html1):
+            if(idx == 1):
+                for i in x:
+                    sector = i
+            if(idx == 5):
+                for i in x:
+                    industry = i 
+        #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
+        output_stock_data()
+        #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+        st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
+        agent_ai_fin(SCRIP)
+        agent_ai_news(SCRIP)
+        st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
+        output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
+        #agent_ai_fin(SCRIP)
+    except Exception:
+        traceback.print_exc()
+        print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
 
 st.info("Watch out this space for more updates")
