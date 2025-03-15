@@ -2,11 +2,14 @@ import streamlit as st
 import pandas as pd
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plot
+import yfinance as yf
 from urllib.request import urlopen, Request
+import matplotlib.pyplot as plt
 import traceback
 from PIL import Image
 from datetime import date
 #from jugaad_data.nse import stock_df
+from datetime import datetime
 from datetime import timedelta
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
@@ -37,7 +40,7 @@ text-align: center;
 """
 
 st.markdown(footer,unsafe_allow_html=True)
-st.sidebar.image("the-fet-quest.jpg")
+#st.sidebar.image("the-fet-quest.jpg")
 st.header(":violet[Know About Your Stock:]",anchor=False)
 
 market_cap = 0.0
@@ -50,16 +53,46 @@ PB_Ratio= 0.0
 stocks_data = []
 LTP = []
 
+# df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
+# col_one_list = df['SYMBOL'].tolist()
+
+# SCRIP = st.selectbox(
+#    "Enter the Stock Symbol",
+#    col_one_list,
+#    index=None,
+#    placeholder="ITC",
+# ) 
+
+today = date.today()
+
 df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
 col_one_list = df['SYMBOL'].tolist()
 
-SCRIP = st.selectbox(
-   "Enter the Stock Symbol",
-   col_one_list,
-   index=None,
-   placeholder="ITC",
-) 
+with st.sidebar: 
 
+    st.header(":green[Select Stock & Date Range to get returns over the period]")
+    
+    SCRIP = st.selectbox(
+        "Select the Stock Symbol",
+        col_one_list,
+        index=None,
+        placeholder="ITC",
+    )
+
+    start_date = st.date_input("Start Date", value=pd.to_datetime("2023-01-01"))
+    end_date = st.date_input("End Date", value=pd.to_datetime(today))
+    proceed = st.button("Proceed",type="primary")
+
+    st.divider()
+    st.markdown(":blue[Services:]")
+    st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
+    st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
+    st.sidebar.page_link('pages/3_Imagebot.py', label='Imagebot')
+    st.sidebar.page_link('pages/4_Indices_and _Interest_Rates.py', label='Indices and Interest_Rate')
+    st.sidebar.page_link('pages/5_PDF_Report_Analyzer.py', label='PDF Report Analyzer')
+    st.sidebar.page_link('pages/6_About_us_And_FAQs.py', label='About us And FAQs')
+    st.divider()
+    st.sidebar.image("the-fet-quest.jpg")
 
 def table_extraction(soup, section_id, class_name):
     section_extract = soup.find('section',{'id': section_id})
@@ -214,19 +247,119 @@ def agent_ai_news(scrip):
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
 
+def stock_retrun_vs_benchmark(scrip):
+    st.subheader(f":blue[ 💲 {SCRIP} vs Indices Return]", anchor=None,)
+    d1 = datetime.strptime(str(start_date), "%Y-%m-%d")
+    d2 = datetime.strptime(str(end_date), "%Y-%m-%d")
+    diff_date=abs((d2.year - d1.year))
+
+
+    # Define tickers
+    ticker_bse = "^BSESN"      # BSE Sensex
+    ticker_nse = "^NSEI"       # NSE Nifty 50
+    ticker_stock = scrip+".NS"    # Individual Stock (ITC)
+
+    # Fetch data
+    data = yf.download(ticker_bse, start=start_date, end=end_date)["Close"]
+    data1 = yf.download(ticker_nse, start=start_date, end=end_date)["Close"]
+    data2 = yf.download(ticker_stock , start=start_date, end=end_date)["Close"]
+
+
+    # Combine data into a single DataFrame
+    df = pd.concat([data, data1, data2], axis=1)
+    df.columns = ["Sensex", "Nifty 50", "Stock"]  # Rename columns
+    df = df.dropna()  # Drop rows with missing values
+
+    stock_name = ticker_stock[:-3]
+    #print(stock_name)
+
+    # Create Matplotlib figure and axes
+    fig1, ax1 = plt.subplots(figsize=(10, 5))
+
+    # First Y-Axis (Sensex)
+    ax1.plot(df.index, df["Sensex"], label="Sensex (BSE)", color="blue")
+    ax1.set_ylabel("Sensex", color="blue")
+    ax1.tick_params(axis='y', labelcolor="blue")
+    ax1.grid(True)
+
+    # Second Y-Axis (Nifty 50)
+    ax2 = ax1.twinx()
+    ax2.plot(df.index, df["Nifty 50"], label="Nifty 50 (NSE)", color="red")
+    ax2.set_ylabel("Nifty 50", color="red")
+    ax2.tick_params(axis='y', labelcolor="red")
+
+    # Third Y-Axis (Stock)
+    ax3 = ax1.twinx()
+    ax3.spines['right'].set_position(('outward', 60))  # Offset third axis
+    ax3.plot(df.index, df["Stock"], label=f"Stock {stock_name }", color="green")
+    ax3.set_ylabel(f"{stock_name }", color="green")
+    ax3.tick_params(axis='y', labelcolor="green")
+
+    # Title and Legend
+    ax1.set_xlabel("Date")
+    ax1.set_title(f"Sensex vs Nifty 50 & {stock_name } for "+str(diff_date)+ " year")
+    fig1.set_size_inches(12, 6)
+    fig1.legend(loc="upper left", bbox_to_anchor=(0.1, 0.9))
+
+    # Display the plot in Streamlit
+    # st.pyplot(fig1)
+    bse_nback = data.iloc[1,0]
+    bse_nprsnt = data.iloc[-1,0]
+    bse_diff = round(bse_nprsnt - bse_nback,2) 
+
+    bse_returns = round((bse_diff/bse_nprsnt)*100,2)
+
+    print(bse_returns)
+
+    nse_nback = data1.iloc[1,0]
+    nse_nprsnt = data1.iloc[-1,0]
+    nse_diff = round(nse_nprsnt - nse_nback,2) 
+    nse_returns = round((nse_diff/nse_nprsnt)*100,2)
+
+    print(nse_returns)
+
+    #print(data2)
+    stock_nback = data2.iloc[1,0]
+    stock_nprsnt = data2.iloc[-1,0]
+    stock_diff = round(stock_nprsnt - stock_nback,2) 
+    stock_returns = round((stock_diff/stock_nprsnt)*100,2)
+
+    # Plot bar chart
+    returns_data = pd.DataFrame({
+        "Index": ["Sensex", "Nifty 50", stock_name],
+        "Returns (%)": [bse_returns, nse_returns, stock_returns]
+    })
+    fig, ax = plt.subplots()
+    bars = ax.bar(returns_data["Index"], returns_data["Returns (%)"], color=["blue", "green", "red"])
+    ax.set_ylabel("Returns (%)")
+    ax.set_title(f"Market & Stock Returns Comparison for "+str(diff_date)+ " years")
+
+    # Adding text labels on bars
+    for bar, label in zip(bars, returns_data["Returns (%)"]):
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{label}%', ha='center', va='bottom')
+    fig.set_size_inches(5, 5)
+
+    with st.expander("Market Performance Charts", expanded=True):
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            st.pyplot(fig1, use_container_width=True)
+        with col2:
+            st.pyplot(fig, use_container_width=True)
+
+    #st.write(f"{stock_name} returned **{stock_returns}%** ,Nifty 50 returned **{nse_returns}%** and Sensex returned **{bse_returns}%** over **{diff_date}** years.")
+    st.markdown(
+    f"""
+    <h4 style='text-align: center; color: #8E44AD;'>
+        {stock_name} returned <span style='font-weight: bold; color: #0000FF;'>{stock_returns}%</span>, 
+        Nifty 50 returned <span style='font-weight: bold; color: #0000FF;'>{nse_returns}%</span>, 
+        and Sensex returned <span style='font-weight: bold; color: #0000FF;'>{bse_returns}%</span> 
+        over <span style='font-weight: bold; color: #0000FF;'>{diff_date}</span> years.
+    </h4>
+    """,
+    unsafe_allow_html=True
+)
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
 def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
-    # c1, c2, c3 = st.columns(3)
-    # with c1:
-    #      st.write(f':orange[Current Market price -] {cmp} Rs')
-    #      st.write(f':orange[Market Capitilization -] {market_cap} Cr')
-    # with c2:
-    #     st.write(f':orange[P/E -] {PE}')
-    #     st.write(f':orange[Book Value -] {BV}')
-    # with c3:
-    #     st.write(f':orange[P/B ratio -] {PB_Ratio}')
-    #     st.write(f':orange[Sector -] {sector.strip()}')
-    #     #st.write(f'Industry : {industry.strip()}')
     c1, c2 = st.columns(2)
 
     with c1:
@@ -300,79 +433,69 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
     #     fig5.tight_layout()
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
-# def agent_ai_fin(scrip):
-#       query = f"Provide a fundamental analysis for {scrip+".NS"}."
-#       chunks = finance_agent.run(query, stream=True)
-#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-#       with st.container():    
-#            st.write("Space for Agentic Container " + scrip)
-#            response = st.write_stream(filtered_chunks)
-# def agent_ai_news(scrip):
-#       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
-#       chunks = web_search_agent.run(query, stream=True)
-#       filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 3)
-#       with st.container():    
-#            st.write("Space for Agentic Container web " + scrip)
-#            response = st.write_stream(filtered_chunks)
 
+if(proceed):
+    if SCRIP is None:
+        st.error("Please select a stock symbol before proceeding.")
+        st.stop()
+    if(SCRIP):
+        link = f'https://www.screener.in/company/{SCRIP}'
+        hdr = {'User-Agent':'Mozilla/5.0'}
+        req = Request(link,headers=hdr)
+    try:
+        page=urlopen(req)
+        soup = BeautifulSoup(page)
+        pr_hld,qtr= promoter_holdings()
+        sales,qtrs = sales_nums()
+        eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
+        #ltpv,eps,qtrss= eps_nums()
+        opm,qts= opm_nums()
+        #print(pr_hld)
+        #print("Quater is "+qtr)
+        #print(sales)
+        div_html = soup.find('div',{'class': 'company-ratios'})
+        ul_html = div_html.find('ul',{'id': 'top-ratios'})
+        for li in ul_html.find_all("li"):
+            name_span = li.find('span',{'class':'name'})
+            if 'Market Cap' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                market_cap = float(num_span) if (num_span != '') else 0.0
+            if ' Current Price' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                cmp = float(num_span) if (num_span != '') else 0.0
+            if ' Stock P/E' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                PE = float(num_span) if (num_span != '') else 0.0
+            if ' Book Value' in name_span.text: 
+                num_span = li.find('span',{'class':'number'})
+                num_span = num_span.text.replace(',', '')
+                BV = float(num_span) if (num_span != '') else 0.0
+        PB_Ratio = (round(cmp/BV,2))
 
-if(SCRIP):
-       link = f'https://www.screener.in/company/{SCRIP}'
-       hdr = {'User-Agent':'Mozilla/5.0'}
-       req = Request(link,headers=hdr)
-try:
-      page=urlopen(req)
-      soup = BeautifulSoup(page)
-      pr_hld,qtr= promoter_holdings()
-      sales,qtrs = sales_nums()
-      eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
-      #ltpv,eps,qtrss= eps_nums()
-      opm,qts= opm_nums()
-      #print(pr_hld)
-      #print("Quater is "+qtr)
-      #print(sales)
-      div_html = soup.find('div',{'class': 'company-ratios'})
-      ul_html = div_html.find('ul',{'id': 'top-ratios'})
-      for li in ul_html.find_all("li"):
-         name_span = li.find('span',{'class':'name'})
-         if 'Market Cap' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               market_cap = float(num_span) if (num_span != '') else 0.0
-         if ' Current Price' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               cmp = float(num_span) if (num_span != '') else 0.0
-         if ' Stock P/E' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               PE = float(num_span) if (num_span != '') else 0.0
-         if ' Book Value' in name_span.text: 
-               num_span = li.find('span',{'class':'number'})
-               num_span = num_span.text.replace(',', '')
-               BV = float(num_span) if (num_span != '') else 0.0
-      PB_Ratio = (round(cmp/BV,2))
-
-      div_html1 = soup.find('div',{'class': 'flex flex-space-between'})
-      ul_html1 = div_html1.find('p')
-      for idx, x in enumerate (ul_html1):
-        if(idx == 1):
-            for i in x:
-                sector = i
-        if(idx == 5):
-            for i in x:
-                industry = i 
-      #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
-      output_stock_data()
-      #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
-      st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
-      agent_ai_fin(SCRIP)
-      agent_ai_news(SCRIP)
-      st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
-      output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
-      #agent_ai_fin(SCRIP)
-except Exception:
-      traceback.print_exc()
-      print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
+        div_html1 = soup.find('div',{'class': 'flex flex-space-between'})
+        ul_html1 = div_html1.find('p')
+        for idx, x in enumerate (ul_html1):
+            if(idx == 1):
+                for i in x:
+                    sector = i
+            if(idx == 5):
+                for i in x:
+                    industry = i 
+        #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
+        output_stock_data()
+        #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
+        st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
+        agent_ai_fin(SCRIP)
+        agent_ai_news(SCRIP)
+        stock_retrun_vs_benchmark(SCRIP)
+        st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
+        output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
+        #agent_ai_fin(SCRIP)
+    except Exception:
+        traceback.print_exc()
+        print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
 
 st.info("Watch out this space for more updates")
