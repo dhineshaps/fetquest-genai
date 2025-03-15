@@ -248,6 +248,7 @@ def agent_ai_news(scrip):
            response = st.write_stream(as_stream(chunks))
 
 def stock_retrun_vs_benchmark(scrip):
+    st.subheader(f":blue[ 💲 {SCRIP} vs Indices Return]", anchor=None,)
     d1 = datetime.strptime(str(start_date), "%Y-%m-%d")
     d2 = datetime.strptime(str(end_date), "%Y-%m-%d")
     diff_date=abs((d2.year - d1.year))
@@ -345,7 +346,18 @@ def stock_retrun_vs_benchmark(scrip):
         with col2:
             st.pyplot(fig, use_container_width=True)
 
-    st.write(f"{stock_name} returned **{stock_returns}%** ,Nifty 50 returned **{nse_returns}%** and Sensex returned **{bse_returns}%** over **{diff_date}** years.")
+    #st.write(f"{stock_name} returned **{stock_returns}%** ,Nifty 50 returned **{nse_returns}%** and Sensex returned **{bse_returns}%** over **{diff_date}** years.")
+    st.markdown(
+    f"""
+    <h4 style='text-align: center; color: #8E44AD;'>
+        {stock_name} returned <span style='font-weight: bold; color: #0000FF;'>{stock_returns}%</span>, 
+        Nifty 50 returned <span style='font-weight: bold; color: #0000FF;'>{nse_returns}%</span>, 
+        and Sensex returned <span style='font-weight: bold; color: #0000FF;'>{bse_returns}%</span> 
+        over <span style='font-weight: bold; color: #0000FF;'>{diff_date}</span> years.
+    </h4>
+    """,
+    unsafe_allow_html=True
+)
 #def output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts):
 def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
     c1, c2 = st.columns(2)
