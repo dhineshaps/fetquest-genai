@@ -9,7 +9,7 @@ with st.sidebar:
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI_Stock_Screener')
     st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
     st.sidebar.page_link('pages/3_Imagebot.py', label='Imagebot')
-    st.sidebar.page_link('pages/4_Indices_and _Interest_Rate.py', label='Indices_and _Interest_Rate')
+    st.sidebar.page_link('pages/4_Indices_and_Interest_Rate.py', label='Indices_and_Interest_Rate')
     st.sidebar.page_link('pages/5_PDF_Report_Analyzer.py', label='PDF_Report_Analyzer')
     st.sidebar.page_link('pages/6_About_us_And_FAQs.py', label='About_us_And_FAQs')
       
