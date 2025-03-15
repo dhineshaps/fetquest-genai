@@ -246,7 +246,7 @@ def agent_ai_news(scrip):
            #st.write("Space for Agentic Container web " + scrip)
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
-           
+
 def stock_retrun_vs_benchmark(scrip):
     d1 = datetime.strptime(str(start_date), "%Y-%m-%d")
     d2 = datetime.strptime(str(end_date), "%Y-%m-%d")
@@ -478,6 +478,7 @@ if(proceed):
         st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
         agent_ai_fin(SCRIP)
         agent_ai_news(SCRIP)
+        stock_retrun_vs_benchmark(SCRIP)
         st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
         output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
         #agent_ai_fin(SCRIP)
