@@ -348,7 +348,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
 if(proceed):
     if SCRIP is None:
         st.error("Please select a stock symbol before proceeding.")
-        sys.exit()
+        st.stop()
     if(SCRIP):
         link = f'https://www.screener.in/company/{SCRIP}'
         hdr = {'User-Agent':'Mozilla/5.0'}
