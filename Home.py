@@ -12,7 +12,7 @@ with st.sidebar:
     st.sidebar.page_link('pages/4_Indices_and _Interest_Rates.py', label='Indices and Interest_Rate')
     st.sidebar.page_link('pages/5_PDF_Report_Analyzer.py', label='PDF Report Analyzer')
     st.sidebar.page_link('pages/6_About_us_And_FAQs.py', label='About us And FAQs')
-
+    st.divider()
     st.sidebar.image("the-fet-quest.jpg")
       
 with cent_co:
