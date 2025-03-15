@@ -3,6 +3,16 @@ from PIL import Image
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="Home", page_icon = im,layout="wide")
 left_co, cent_co,last_co = st.columns(3)
+
+with st.sidebar: 
+    st.markdown(":blue[Services:]")
+    st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI_Stock_Screener')
+    st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
+    st.sidebar.page_link('pages/3_Imagebot.py', label='Imagebot')
+    st.sidebar.page_link('pages/4_Indices_and _Interest_Rate.py', label='Indices_and _Interest_Rate')
+    st.sidebar.page_link('pages/5_PDF_Report_Analyzer.py', label='PDF_Report_Analyzer')
+    st.sidebar.page_link('pages/6_About_us_And_FAQs.py', label='About_us_And_FAQs')
+      
 with cent_co:
       new_title = '<p style="font-family:fantasy; color:#DAA520; font-size: 42px;">The FET Quest</p>'
       st.markdown(new_title, unsafe_allow_html=True)
