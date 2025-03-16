@@ -87,7 +87,7 @@ today = date.today()
 # col_one_list = df['SYMBOL'].tolist()
 
 if st.sidebar.button("🏠 Home"):
-    st.query_params["page"] = "home"  # Set query param
+    st.query_params["page"] = "Home"  # Set query param
     st.rerun() 
 
 with st.sidebar: 
