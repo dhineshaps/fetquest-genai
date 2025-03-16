@@ -42,8 +42,6 @@ text-align: center;
 st.markdown(footer,unsafe_allow_html=True)
 #st.sidebar.image("the-fet-quest.jpg")
 st.header(":violet[Know About Your Stock:]",anchor=False)
-
-st.header(":violet[Testtttttttt:]",anchor=False)
 market_cap = 0.0
 cmp = 0.0
 PE = 0.0
@@ -82,10 +80,9 @@ with st.form("input_form"):
     with col3:
         end_date = st.date_input("End", value=date.today())
 
-    submit = st.form_submit_button("Submit",type="primary")
+    proceed = st.form_submit_button("proceed",type="primary")
 
 today = date.today()
-#test
 # df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
 # col_one_list = df['SYMBOL'].tolist()
 
