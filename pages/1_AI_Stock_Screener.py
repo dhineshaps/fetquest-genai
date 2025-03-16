@@ -86,6 +86,10 @@ today = date.today()
 # df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
 # col_one_list = df['SYMBOL'].tolist()
 
+if st.sidebar.button("🏠 Home"):
+    st.experimental_set_query_params(page="Home.py")  # Optional: Set query param
+    st.rerun() 
+
 with st.sidebar: 
 
     # st.header(":green[Select Stock & Date Range to get returns over the period]")
