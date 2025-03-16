@@ -5,7 +5,8 @@ import webbrowser
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="Home", page_icon = im,layout="wide")
 
-with st.sidebar: 
+with st.sidebar:
+    st.sidebar.page_link('pages/homepage.py', label='Home') 
     st.markdown(":blue[Services:]")
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
     st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
