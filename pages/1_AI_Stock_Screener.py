@@ -42,7 +42,6 @@ text-align: center;
 st.markdown(footer,unsafe_allow_html=True)
 #st.sidebar.image("the-fet-quest.jpg")
 st.header(":violet[Know About Your Stock:]",anchor=False)
-
 market_cap = 0.0
 cmp = 0.0
 PE = 0.0
@@ -53,8 +52,8 @@ PB_Ratio= 0.0
 stocks_data = []
 LTP = []
 
-# df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-# col_one_list = df['SYMBOL'].tolist()
+df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
+col_one_list = df['SYMBOL'].tolist()
 
 # SCRIP = st.selectbox(
 #    "Enter the Stock Symbol",
@@ -63,27 +62,48 @@ LTP = []
 #    placeholder="ITC",
 # ) 
 
-today = date.today()
-
-df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-col_one_list = df['SYMBOL'].tolist()
-
-with st.sidebar: 
-
-    st.header(":green[Select Stock & Date Range to get returns over the period]")
+with st.form("input_form"):
+    st.subheader(":green[Select Stock & Date Range to get returns over the period]")
+    col1, col2, col3 = st.columns([2, 1, 1])  # Adjusting column width
     
-    SCRIP = st.selectbox(
+    with col1:
+     SCRIP = st.selectbox(
         "Select the Stock Symbol",
         col_one_list,
         index=None,
         placeholder="ITC",
     )
 
-    start_date = st.date_input("Start Date", value=pd.to_datetime("2023-01-01"))
-    end_date = st.date_input("End Date", value=pd.to_datetime(today))
-    proceed = st.button("Proceed",type="primary")
+    with col2:
+        start_date = st.date_input("Start", value=date(2023, 1, 1))
 
-    st.divider()
+    with col3:
+        end_date = st.date_input("End", value=date.today())
+
+    proceed = st.form_submit_button("proceed",type="primary")
+
+today = date.today()
+# df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
+# col_one_list = df['SYMBOL'].tolist()
+
+with st.sidebar: 
+
+    # st.header(":green[Select Stock & Date Range to get returns over the period]")
+    
+    # SCRIP = st.selectbox(
+    #     "Select the Stock Symbol",
+    #     col_one_list,
+    #     index=None,
+    #     placeholder="ITC",
+    # )
+
+    # start_date = st.date_input("Start Date", value=pd.to_datetime("2023-01-01"))
+    # end_date = st.date_input("End Date", value=pd.to_datetime(today))
+    # proceed = st.button("Proceed",type="primary")
+
+    #st.divider()
+    #st.markdown(":blue[Services:]")
+    st.sidebar.page_link('pages/homepage.py', label='Home')
     st.markdown(":blue[Services:]")
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
     st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
