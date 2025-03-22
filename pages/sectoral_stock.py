@@ -54,7 +54,7 @@ if "Unnamed: 0" in df1.columns:
 df1.index = range(1, len(df1) + 1)
 df1 = df1.fillna('')
 clm_name = df1.columns.tolist()
-st.markdown('<p style="color: red; font-size: 20px; font-weight: bold;">Select a sector:</p>', unsafe_allow_html=True)
+st.markdown('<p style="color: #0000FF; font-size: 20px; font-weight: bold;">Select a sector:</p>', unsafe_allow_html=True)
 
 select_column = st.selectbox("", clm_name,index=None,placeholder="5G")
 if select_column:
