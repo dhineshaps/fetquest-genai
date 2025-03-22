@@ -59,5 +59,6 @@ if select_column:
     filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
         st.markdown(f'<h3 style="color:#FFFF00;">{select_column} Sectoral Stocks</h3>', unsafe_allow_html=True)
+        st.markdown("⬇ **Scroll down to view more rows**")
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
         st.dataframe(filtered_df, use_container_width=True)
