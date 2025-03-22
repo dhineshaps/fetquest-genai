@@ -43,7 +43,6 @@ text-align: center;
 </div>
 """
 st.markdown(footer,unsafe_allow_html=True)
-st.sidebar.image("the-fet-quest.jpg")
 
 
 df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock_ext.csv", index_col=0)
