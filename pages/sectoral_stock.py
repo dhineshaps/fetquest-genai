@@ -24,6 +24,7 @@ with st.sidebar:
     st.sidebar.image("the-fet-quest.jpg")
 
 st.header(":violet[Stocks in Sectors:]",anchor=False)
+print("dummy")
 
 footer="""<style>
 #MainMenu {visibility: hidden; }
