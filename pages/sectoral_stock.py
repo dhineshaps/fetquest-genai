@@ -24,7 +24,6 @@ with st.sidebar:
     st.sidebar.image("the-fet-quest.jpg")
 
 st.header(":violet[Stocks in Sectors:]",anchor=False)
-print("dummy")
 
 footer="""<style>
 #MainMenu {visibility: hidden; }
@@ -46,7 +45,7 @@ st.markdown(footer,unsafe_allow_html=True)
 st.sidebar.image("the-fet-quest.jpg")
 
 
-df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock.csv", index_col=0)
+df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock_ext.csv", index_col=0)
 
 if "Unnamed: 0" in df1.columns:
     df1 = df1.drop(columns=["Unnamed: 0"])
