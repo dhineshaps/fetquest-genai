@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
-st.set_page_config(page_title="Chatbot", page_icon = im,layout="wide")
+st.set_page_config(page_title="sectoral_stocks", page_icon = im,layout="wide")
 
 with st.sidebar:
     st.sidebar.page_link('pages/homepage.py', label='Home') 
@@ -58,6 +58,6 @@ select_column = st.selectbox("Select a sector:", clm_name,index=None,placeholder
 if select_column:
     filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
-        st.markdown(f'<h3 style="color:green;">{select_column} Sectoral Stocks</h3>', unsafe_allow_html=True)
+        st.markdown(f'<h3 style="color:#FFFF00;">{select_column} Sectoral Stocks</h3>', unsafe_allow_html=True)
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
         st.dataframe(filtered_df, use_container_width=True)
