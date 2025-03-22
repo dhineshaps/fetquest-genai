@@ -106,6 +106,7 @@ with st.sidebar:
     st.sidebar.page_link('pages/homepage.py', label='Home')
     st.markdown(":blue[Services:]")
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
+    st.sidebar.page_link('pages/sectoral_stock.py', label='Sectoral Stocks')
     st.sidebar.page_link('pages/2_Chatbot.py', label='Chatbot')
     st.sidebar.page_link('pages/3_Imagebot.py', label='Imagebot')
     st.sidebar.page_link('pages/4_Indices_and _Interest_Rates.py', label='Indices and Interest_Rate')
