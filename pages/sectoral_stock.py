@@ -1,3 +1,5 @@
+import pandas as pd
+import streamlit as st
 import pathlib
 import textwrap
 import google.generativeai as genai
@@ -7,10 +9,10 @@ from dotenv import load_dotenv
 
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
-st.set_page_config(page_title="Chatbot", page_icon = im,layout="wide")
+st.set_page_config(page_title="sectoral_stocks", page_icon = im,layout="wide")
 
-with st.sidebar: 
-    st.sidebar.page_link('pages/homepage.py', label='Home')
+with st.sidebar:
+    st.sidebar.page_link('pages/homepage.py', label='Home') 
     st.markdown(":blue[Services:]")
     st.sidebar.page_link('pages/1_AI_Stock_Screener.py', label='AI Stock Screener')
     st.sidebar.page_link('pages/sectoral_stock.py', label='Sectoral Stocks')
@@ -22,11 +24,7 @@ with st.sidebar:
     st.divider()
     st.sidebar.image("the-fet-quest.jpg")
 
-left_co, cent_co,last_co = st.columns(3)
-with cent_co:
-#    st.title("The FET Quest")
-      new_title = '<p style="font-family:fantasy; color:#DAA520; font-size: 32px;">Chatbot 🤖</p>'
-      st.markdown(new_title, unsafe_allow_html=True)
+st.header(":violet[Stocks in Sectors:]",anchor=False)
 
 footer="""<style>
 #MainMenu {visibility: hidden; }
@@ -47,30 +45,22 @@ text-align: center;
 st.markdown(footer,unsafe_allow_html=True)
 st.sidebar.image("the-fet-quest.jpg")
 
-load_dotenv() ##loading all the environment variables
 
-#genai.configure(api_key=os.getenv("GOOGLE_API_KEY")) #locally
+df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock_ext.csv", index_col=0)
 
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+if "Unnamed: 0" in df1.columns:
+    df1 = df1.drop(columns=["Unnamed: 0"])
 
-st.info("Chatbot is powered by Google Gemini Pro and have trained Data till Sep 2021")
-## FUNCTION TO LOAD Gemini Pro model and get response
+df1.index = range(1, len(df1) + 1)
+df1 = df1.fillna('')
+clm_name = df1.columns.tolist()
+st.markdown('<p style="color: #0000FF; font-size: 20px; font-weight: bold;">Select a sector:</p>', unsafe_allow_html=True)
 
-model = genai.GenerativeModel("gemini-1.5-pro-latest")  #for text - gemini pro
-
-def get_gemini_response(question):
-
-    response = model.generate_content(question)
-   
-    return response.text
-
-input = st.text_input(":blue[**_Input:_**] ",key="input",placeholder="say hi and start the conversation")
-
-submit = st.button(":green[Ask the question]")
-
-#when submit is clicked
-
-if submit:
-    response = get_gemini_response(input)
-    st.subheader("The Response is ")
-    st.write(response)
+select_column = st.selectbox("", clm_name,index=None,placeholder="5G")
+if select_column:
+    filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
+    if filtered_values:
+        st.markdown(f'<h3 style="color:#FFFF00;">{select_column} Sectoral Stocks</h3>', unsafe_allow_html=True)
+        st.markdown("⬇ **Scroll down to view more rows**")
+        filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
+        st.dataframe(filtered_df, use_container_width=True)
