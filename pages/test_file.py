@@ -2,8 +2,8 @@ import pandas as pd
 import streamlit as st
 import sys
 
-for key in list(st.session_state.keys()):
-    del st.session_state[key]
+# for key in list(st.session_state.keys()):
+#     del st.session_state[key]
 
 
 df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
@@ -47,9 +47,9 @@ if select_column:
                     st.write("Unfrtunately can't fulfill the request for given cos, write to fetquest")
                     st.stop()
             st.write("Script is ",scrip)
-            st.session_state["data"] = {"cos": cos, "scrip": scrip,"market":market}
-            if(scrip):
-                 st.switch_page("pages/1_AI_Stock_Screener.py")
+            # st.session_state["data"] = {"cos": cos, "scrip": scrip,"market":market}
+            # if(scrip):
+            #      st.switch_page("pages/1_AI_Stock_Screener.py")
         #st.write(f"Stored in session: {st.session_state['selected_company']}")
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
         st.dataframe(filtered_df, use_container_width=True)
