@@ -16,6 +16,24 @@ from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_str
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="Stock_Data", page_icon = im,layout="wide")
 
+#      To handle the session variable passed for sectoral data #########################
+cos=""
+scrip=""
+market=""
+
+if "data" in st.session_state:
+    #st.write("Session State Variables:")
+    cos = st.session_state["data"].get("cos", None)
+    scrip = st.session_state["data"].get("scrip", None)
+    market= st.session_state["data"].get("market",None)
+
+if not cos or not scrip or not market:  # Check if either 'cos' or 'scrip' is empty/missing
+    cos = cos if cos else "dummy"  
+    scrip = scrip if scrip else "dummy"
+    market = market if market else "dummy"
+
+#   End of to handle the session variable passed for sectoral data #########################
+
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
       new_title = '<p style="font-family:fantasy; color:#DAA520; font-size: 32px;">Stock Screener  📈</p>'
@@ -52,15 +70,12 @@ PB_Ratio= 0.0
 stocks_data = []
 LTP = []
 
-df = pd.read_csv('/mount/src/fetquest-genai/stock_list.csv')  #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-col_one_list = df['SYMBOL'].tolist()
 
-# SCRIP = st.selectbox(
-#    "Enter the Stock Symbol",
-#    col_one_list,
-#    index=None,
-#    placeholder="ITC",
-# ) 
+#data needs to be handled by multiple ways and compared with latest NSE data
+#data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
+df = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0) 
+col_one_list = df['Name of the Company'].tolist()
+
 
 with st.form("input_form"):
     st.subheader(":green[Select Stock & Date Range to get returns over the period]")
@@ -68,7 +83,7 @@ with st.form("input_form"):
     
     with col1:
      SCRIP = st.selectbox(
-        "Select the Stock Symbol",
+        "Select the Stock Company",
         col_one_list,
         index=None,
         placeholder="ITC",
@@ -171,7 +186,7 @@ def ltp_extraction():
      #print(LTP)
      return LTP
 
-def promoter_holdings():
+def promoter_holdings(soup):
      promoter_holding,Headers = table_extraction(soup,'shareholding','data-table')
      promoter_holding.drop(promoter_holding.tail(1).index,inplace=True)
      sharehold_last_qtr = Headers[-1]
@@ -180,20 +195,23 @@ def promoter_holdings():
      df1 = promoter_holding[['Type', sharehold_last_qtr]]    
      return df1,sharehold_last_qtr
 
-def sales_nums():
+def sales_nums(soup):
      table_df,qtrs = table_extraction(soup,'quarters','data-table')
      df2 = table_df.loc[[0]]
      row_list = df2.loc[[0]].values.flatten().tolist()
      heads =qtrs[1:]
-     num_row = [float(i) for i in row_list[1:]]   
+     #num_row = [float(i) for i in row_list[1:]] 
+     #to handle the empty space vale if the company don't have data
+     num_row = [float(i) if i.replace('.', '', 1).replace('-', '', 1).isdigit() else 0 for i in row_list[1:]]   
      return num_row,qtrs
 
-def eps_nums():
+def eps_nums(soup):
      table_df,qtrs = table_extraction(soup,'quarters','data-table')
      df3 = table_df.loc[[10]]
      row_list = df3.loc[[10]].values.flatten().tolist()
      heads =qtrs[1:]
-     num_row = [float(i) for i in row_list[1:]]
+     #num_row = [float(i) for i in row_list[1:]]
+     num_row = [float(i) if i.replace('.', '', 1).replace('-', '', 1).isdigit() else 0 for i in row_list[1:]] 
      # cols = heads
      # for i in cols:
      #        month = i.split(" ")[0]
@@ -226,16 +244,17 @@ def eps_nums():
      return num_row, qtrs
 
 
-def opm_nums():
+def opm_nums(soup):
      table_df,qtrs = table_extraction(soup,'quarters','data-table')
      df4 = table_df.loc[[3]]
      row_list = df4.loc[[3]].values.flatten().tolist()
      heads =qtrs[1:]
-     num_row = [float(i) for i in row_list[1:]]
+     #num_row = [float(i) for i in row_list[1:]]
+     num_row = [float(i) if i.replace('.', '', 1).replace('-', '', 1).isdigit() else 0 for i in row_list[1:]] 
      print(num_row)
      return num_row, qtrs
 
-def output_stock_data():
+def output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector):
     c1, c2, c3 = st.columns(3)
     with c1:
          st.write(f':orange[Current Market price -] {cmp} Rs')
@@ -269,7 +288,7 @@ def agent_ai_news(scrip):
            response = st.write_stream(as_stream(chunks))
 
 def stock_retrun_vs_benchmark(scrip):
-    st.subheader(f":blue[ 💲 {SCRIP} vs Indices Return]", anchor=None,)
+    st.subheader(f":blue[ 💲 {cos} vs Indices Return]", anchor=None,)
     d1 = datetime.strptime(str(start_date), "%Y-%m-%d")
     d2 = datetime.strptime(str(end_date), "%Y-%m-%d")
     diff_date=abs((d2.year - d1.year))
@@ -455,10 +474,7 @@ def output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss):
     #     st.pyplot(fig5)
     #     st.info("EPS Increasing along with Price of the stock shows the steady earning and justifiable Stock Price")
 
-if(proceed):
-    if SCRIP is None:
-        st.error("Please select a stock symbol before proceeding.")
-        st.stop()
+def main_flow(SCRIP):
     if(SCRIP):
         link = f'https://www.screener.in/company/{SCRIP}'
         hdr = {'User-Agent':'Mozilla/5.0'}
@@ -466,11 +482,11 @@ if(proceed):
     try:
         page=urlopen(req)
         soup = BeautifulSoup(page)
-        pr_hld,qtr= promoter_holdings()
-        sales,qtrs = sales_nums()
-        eps,qtrss= eps_nums() #needs to be commented if below is working but historical stock price is not working
+        pr_hld,qtr= promoter_holdings(soup)
+        sales,qtrs = sales_nums(soup)
+        eps,qtrss= eps_nums(soup) #needs to be commented if below is working but historical stock price is not working
         #ltpv,eps,qtrss= eps_nums()
-        opm,qts= opm_nums()
+        opm,qts= opm_nums(soup)
         #print(pr_hld)
         #print("Quater is "+qtr)
         #print(sales)
@@ -506,17 +522,39 @@ if(proceed):
                 for i in x:
                     industry = i 
         #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
-        output_stock_data()
+        output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector)
         #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
         st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
-        agent_ai_fin(SCRIP)
-        agent_ai_news(SCRIP)
-        stock_retrun_vs_benchmark(SCRIP)
+        if(market=="NSE"):
+            agent_ai_fin(SCRIP)
+            agent_ai_news(SCRIP)
+            stock_retrun_vs_benchmark(SCRIP)
         st.subheader(f":orange[{SCRIP} Financial Performance 📊 ]" ,anchor=None) 
         output_display(pr_hld,qtr,sales,qtrs,opm,qts,eps,qtrss)
-        #agent_ai_fin(SCRIP)
     except Exception:
         traceback.print_exc()
         print(f'EXCEPTION THROWN: UNABLE TO FETCH DATA FOR {SCRIP}')
+
+if(proceed):
+    if SCRIP is None:
+        st.error("Please select a stock symbol before proceeding.")
+        st.stop()
+    if(SCRIP):
+        cos=SCRIP
+        scrip_sel = df.loc[df['Name of the Company'] == SCRIP, 'NSE_Symbol'].item()
+        market="NSE"
+        print(scrip)
+        st.write("here")
+        if pd.isna(scrip_sel):
+            st.write("nse is empty")
+            scrip_sel = int(df.loc[df['Name of the Company'] == SCRIP, 'BSE_Symbol'].item())
+            market="BSE" 
+    main_flow(scrip_sel)
+
+if(cos!="dummy" and scrip!="dummy" and market!="dummy"):
+    st.write("not a same page call")
+    st.write(scrip)
+    main_flow(scrip)
+
 
 st.info("Watch out this space for more updates")
