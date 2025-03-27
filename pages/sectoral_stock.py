@@ -101,14 +101,14 @@ if select_column:
     else:
         st.warning("No companies available for this sector.")
 
-def agent_ai_news(scrip):
-      st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
-      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
-      chunks = web_search_agent.run(query, stream=True)
-      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
-      with st.container(border=True,height=400):    
-           #st.write("Space for Agentic Container web " + scrip)
-           #response = st.write_stream(filtered_chunks)
-           response = st.write_stream(as_stream(chunks))
+# def agent_ai_news(scrip):
+#       st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
+#       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+#       chunks = web_search_agent.run(query, stream=True)
+#       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
+#       with st.container(border=True,height=400):    
+#            #st.write("Space for Agentic Container web " + scrip)
+#            #response = st.write_stream(filtered_chunks)
+#            response = st.write_stream(as_stream(chunks))
 # if select_column:
 #     agent_ai_news(select_column)
