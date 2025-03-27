@@ -71,6 +71,7 @@ if select_column:
         if val:
             if(selected_value): 
                cos = selected_value
+               st.write(cos)
             else:
                 st.write("Please select the Stock continue")
                 st.stop()
