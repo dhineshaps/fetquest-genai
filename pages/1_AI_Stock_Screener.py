@@ -547,8 +547,9 @@ if(proceed):
         if pd.isna(scrip_sel):
             st.write("nse is empty")
             scrip_sel = int(df.loc[df['Name of the Company'] == SCRIP, 'BSE_Symbol'].item())
-            market="BSE" 
-    main_flow(scrip_sel)
+            market="BSE"
+    with st.spinner("Loading data..."): 
+        main_flow(scrip_sel)
 
 if(cos!="dummy" and scrip!="dummy" and market!="dummy"):
     # st.write("not a same page call")
