@@ -45,7 +45,7 @@ text-align: center;
 st.markdown(footer,unsafe_allow_html=True)
 
 
-df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock_ext.csv", index_col=0)
+df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
 df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
 #conveerting bse symbols to Int from float
