@@ -95,13 +95,14 @@ if select_column:
             if(scrip):
                  st.switch_page("pages/1_AI_Stock_Screener.py")
         #st.write(f"Stored in session: {st.session_state['selected_company']}")
+        st.write(f"List of companies in {select_column} sector")
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
         st.dataframe(filtered_df, use_container_width=True)
     else:
         st.warning("No companies available for this sector.")
 
 def agent_ai_news(scrip):
-      st.subheader(f":blue[ 💡 Events about {scrip} sector]", anchor=None,)
+      st.subheader(f":blue[ 💡 {scrip} sector] Analysis", anchor=None,)
       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
       chunks = web_search_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
