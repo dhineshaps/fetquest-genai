@@ -86,7 +86,7 @@ if select_column:
                   scrip = df2.loc[df2['Name of the Company'] == cos, 'BSE_Symbol'].item()
                   market="BSE"
                 except:
-                    st.write("unfortunately can't fulfill the request for given cos, write to fetquest")
+                    st.write("unfortunately can't fulfill the request for given company, write to fetquest")
                     st.stop()
             #st.write("Script is ",scrip)
             st.session_state["data"] = {"cos": cos, "scrip": scrip,"market":market}
