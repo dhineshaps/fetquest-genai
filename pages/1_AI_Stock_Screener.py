@@ -73,7 +73,7 @@ LTP = []
 
 #data needs to be handled by multiple ways and compared with latest NSE data
 #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-df = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv") 
+df = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv") 
 col_one_list = df['Name of the Company'].tolist()
 
 
