@@ -46,6 +46,11 @@ st.markdown(footer,unsafe_allow_html=True)
 
 
 df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_stock_ext.csv", index_col=0)
+df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+
+#conveerting bse symbols to Int from float
+df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
+
 
 if "Unnamed: 0" in df1.columns:
     df1 = df1.drop(columns=["Unnamed: 0"])
@@ -53,13 +58,42 @@ if "Unnamed: 0" in df1.columns:
 df1.index = range(1, len(df1) + 1)
 df1 = df1.fillna('')
 clm_name = df1.columns.tolist()
-st.markdown('<p style="color: #0000FF; font-size: 20px; font-weight: bold;">Select a sector:</p>', unsafe_allow_html=True)
 
-select_column = st.selectbox("", clm_name,index=None,placeholder="5G")
+select_column = st.selectbox("Select a sector:", clm_name)
+
 if select_column:
+    st.write(f"Selected Sector: {select_column}")
     filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
-        st.markdown(f'<h3 style="color:#FFFF00;">{select_column} Sectoral Stocks</h3>', unsafe_allow_html=True)
-        st.markdown("⬇ **Scroll down to view more rows**")
+        selected_value = st.selectbox("Select a Company:", filtered_values,index=None,placeholder="ITC",)
+        st.session_state["selected_company"] = selected_value
+        val = st.button("Proceed",type="primary")
+        if val:
+            if(selected_value): 
+               cos = selected_value
+            else:
+                st.write("Please select the Stock continue")
+                st.stop()
+            try:
+               scrip = df2.loc[df2['Name of the Company'] == cos, 'NSE_Symbol'].item()
+               market="NSE"
+            except:
+               scrip = None
+            if pd.isna(scrip):
+            #if(scrip):
+                #st.write("nse is empty")
+                try:
+                  scrip = df2.loc[df2['Name of the Company'] == cos, 'BSE_Symbol'].item()
+                  market="BSE"
+                except:
+                    st.write("unfortunately can't fulfill the request for given cos, write to fetquest")
+                    st.stop()
+            #st.write("Script is ",scrip)
+            st.session_state["data"] = {"cos": cos, "scrip": scrip,"market":market}
+            if(scrip):
+                 st.switch_page("pages/1_AI_Stock_Screener.py")
+        #st.write(f"Stored in session: {st.session_state['selected_company']}")
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
         st.dataframe(filtered_df, use_container_width=True)
+    else:
+        st.warning("No companies available for this sector.")
