@@ -553,7 +553,8 @@ if(proceed):
 if(cos!="dummy" and scrip!="dummy" and market!="dummy"):
     # st.write("not a same page call")
     # st.write(scrip)
-    main_flow(scrip)
+    with st.spinner("Loading data..."):
+        main_flow(scrip)
 
 
 st.info("Watch out this space for more updates")
