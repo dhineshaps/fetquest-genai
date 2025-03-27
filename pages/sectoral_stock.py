@@ -8,6 +8,9 @@ import os
 from dotenv import load_dotenv
 #from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
+for key in list(st.session_state.keys()):
+    del st.session_state[key]
+    
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="sectoral_stocks", page_icon = im,layout="wide")
