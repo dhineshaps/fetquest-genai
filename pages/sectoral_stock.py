@@ -6,7 +6,7 @@ import google.generativeai as genai
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
+#from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
