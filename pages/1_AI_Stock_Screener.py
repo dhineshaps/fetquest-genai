@@ -544,7 +544,6 @@ if(proceed):
         scrip_sel = df.loc[df['Name of the Company'] == SCRIP, 'NSE_Symbol'].item()
         market="NSE"
         print(scrip)
-        st.write("here")
         if pd.isna(scrip_sel):
             st.write("nse is empty")
             scrip_sel = int(df.loc[df['Name of the Company'] == SCRIP, 'BSE_Symbol'].item())
