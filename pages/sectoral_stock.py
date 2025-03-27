@@ -102,7 +102,7 @@ if select_column:
         st.warning("No companies available for this sector.")
 
 def agent_ai_news(scrip):
-      st.subheader(f":blue[ 💡 {scrip} ] Sector Analysis", anchor=None,)
+      st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
       chunks = web_search_agent.run(query, stream=True)
       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
