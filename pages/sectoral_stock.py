@@ -110,5 +110,5 @@ def agent_ai_news(scrip):
            #st.write("Space for Agentic Container web " + scrip)
            #response = st.write_stream(filtered_chunks)
            response = st.write_stream(as_stream(chunks))
-if select_column:
-    agent_ai_news(select_column)
+# if select_column:
+#     agent_ai_news(select_column)
