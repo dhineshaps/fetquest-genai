@@ -551,8 +551,8 @@ if(proceed):
     main_flow(scrip_sel)
 
 if(cos!="dummy" and scrip!="dummy" and market!="dummy"):
-    st.write("not a same page call")
-    st.write(scrip)
+    # st.write("not a same page call")
+    # st.write(scrip)
     main_flow(scrip)
 
 
