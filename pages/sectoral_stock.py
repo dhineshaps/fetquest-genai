@@ -6,6 +6,7 @@ import google.generativeai as genai
 import streamlit as st
 import os
 from dotenv import load_dotenv
+from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
@@ -98,3 +99,15 @@ if select_column:
         st.dataframe(filtered_df, use_container_width=True)
     else:
         st.warning("No companies available for this sector.")
+
+def agent_ai_news(scrip):
+      st.subheader(f":blue[ 💡 Events about {scrip} sector]", anchor=None,)
+      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+      chunks = web_search_agent.run(query, stream=True)
+      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
+      with st.container(border=True,height=400):    
+           #st.write("Space for Agentic Container web " + scrip)
+           #response = st.write_stream(filtered_chunks)
+           response = st.write_stream(as_stream(chunks))
+if select_column:
+    agent_ai_news(select_column)
