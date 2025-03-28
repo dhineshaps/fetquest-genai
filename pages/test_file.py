@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
 import sys
-
+from st_aggrid import AgGrid
 # for key in list(st.session_state.keys()):
 #     del st.session_state[key]
 
-
+"""
 try:
     df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
     df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
@@ -67,3 +67,15 @@ if select_column:
              st.warning("No data available for the selected sector.")
 
 #print(df2)
+"""
+
+df = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
+
+st.subheader("Data Preview")
+#AgGrid(df)
+selected_column = st.selectbox("Select a column", df.columns)
+if selected_column:
+    unique_values = df[selected_column].dropna().unique()
+    st.subheader(f"Unique values in {selected_column}")
+    unique_df = pd.DataFrame({selected_column: unique_values})
+    AgGrid(unique_df)
