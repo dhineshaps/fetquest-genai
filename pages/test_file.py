@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import sys
-from st_aggrid import AgGrid
+from st_aggrid import AgGrid, GridOptionsBuilder
 # for key in list(st.session_state.keys()):
 #     del st.session_state[key]
 
