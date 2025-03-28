@@ -6,9 +6,12 @@ import sys
 #     del st.session_state[key]
 
 
-df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
-df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
-
+try:
+    df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
+    df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+except FileNotFoundError as e:
+    st.error(f"Error loading data: {e}")
+    sys.exit()
 # df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce')
 # df2['BSE_Symbol'] = df2['BSE_Symbol'].fillna(0).astype(int)
 # # df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
@@ -23,7 +26,11 @@ select_column = st.selectbox("Select a sector:", clm_name)
 
 if select_column:
     st.write(f"Selected Sector: {select_column}")
-    filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
+    if select_column in df1.columns:
+          filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
+    else:
+        st.error(f"Error: The selected column '{select_column}' does not exist in df1.")
+        st.stop()
     if filtered_values:
         # selected_value = st.selectbox("Select a Company:", filtered_values,index=None,placeholder="ITC",)
         # st.session_state["selected_company"] = selected_value
@@ -54,8 +61,9 @@ if select_column:
         #     #      st.switch_page("pages/1_AI_Stock_Screener.py")
         # #st.write(f"Stored in session: {st.session_state['selected_company']}")
         filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
-        st.dataframe(filtered_df, use_container_width=True)
-    else:
-        st.warning("No companies available for this sector.")
+        if not filtered_df.empty:
+            st.dataframe(filtered_df, use_container_width=True)
+        else:
+             st.warning("No data available for the selected sector.")
 
 #print(df2)
