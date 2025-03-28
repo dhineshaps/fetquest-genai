@@ -53,8 +53,8 @@ if select_column:
         #     # if(scrip):
         #     #      st.switch_page("pages/1_AI_Stock_Screener.py")
         # #st.write(f"Stored in session: {st.session_state['selected_company']}")
-        # filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
-        # st.dataframe(filtered_df, use_container_width=True)
+        filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
+        st.dataframe(filtered_df, use_container_width=True)
     else:
         st.warning("No companies available for this sector.")
 
