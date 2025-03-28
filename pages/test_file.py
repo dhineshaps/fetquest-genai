@@ -75,7 +75,17 @@ st.subheader("Data Preview")
 #AgGrid(df)
 selected_column = st.selectbox("Select a column", df.columns)
 if selected_column:
+    # Get unique values of the selected column
     unique_values = df[selected_column].dropna().unique()
+    
+    # Display unique values in AgGrid
     st.subheader(f"Unique values in {selected_column}")
     unique_df = pd.DataFrame({selected_column: unique_values})
-    AgGrid(unique_df)
+    
+    # Configure Grid Options
+    gb = GridOptionsBuilder.from_dataframe(unique_df)
+    gb.configure_default_column(width=200)
+    grid_options = gb.build()
+    
+    # Display AgGrid with reduced height
+    AgGrid(unique_df, gridOptions=grid_options, fit_columns_on_grid_load=True, height=300)
