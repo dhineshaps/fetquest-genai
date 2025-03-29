@@ -56,7 +56,7 @@ st.markdown(footer,unsafe_allow_html=True)
 df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
 df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
-#conveerting bse symbols to Int from float
+#converting bse symbols to Int from float
 df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
 
 
@@ -73,7 +73,7 @@ selected_column = st.selectbox("Select a sector:", clm_name)
 if selected_column:
     filtered_values = df1[selected_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
-        selected_value = st.selectbox("Select a Company:", filtered_values,index=None,placeholder="ITC",)
+        selected_value = st.selectbox("Select a Company to Analysis Further based on below data:", filtered_values,index=None,placeholder="ITC",)
         val = st.button("Proceed",type="primary")
         if val:
             if(selected_value):
