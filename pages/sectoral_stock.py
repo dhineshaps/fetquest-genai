@@ -6,14 +6,18 @@ import google.generativeai as genai
 import streamlit as st
 import os
 from dotenv import load_dotenv
-#from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
+from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
+from st_aggrid import AgGrid,GridOptionsBuilder
 
-for key in list(st.session_state.keys()):
-    del st.session_state[key]
     
 from PIL import Image
 im = Image.open('the-fet-quest.jpg')
 st.set_page_config(page_title="sectoral_stocks", page_icon = im,layout="wide")
+
+
+for key in list(st.session_state.keys()):
+    del st.session_state[key]
+
 
 with st.sidebar:
     st.sidebar.page_link('pages/homepage.py', label='Home') 
@@ -63,55 +67,63 @@ df1.index = range(1, len(df1) + 1)
 df1 = df1.fillna('')
 clm_name = df1.columns.tolist()
 
-select_column = st.selectbox("Select a sector:", clm_name)
-
-if select_column:
-    #st.write(f"Selected Sector: {select_column}")
-    filtered_values = df1[select_column].replace("", pd.NA).dropna().tolist()
+st.markdown('<p style="color: #0000FF; font-size: 20px; font-weight: bold;">Select a sector:</p>', unsafe_allow_html=True)
+#AgGrid(df)
+selected_column = st.selectbox("Select a sector:", clm_name)
+if selected_column:
+    filtered_values = df1[selected_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
         selected_value = st.selectbox("Select a Company:", filtered_values,index=None,placeholder="ITC",)
-        st.session_state["selected_company"] = selected_value
         val = st.button("Proceed",type="primary")
         if val:
-            if(selected_value): 
-               cos = selected_value
-               st.write(cos)
+            if(selected_value):
+                cos = selected_value
             else:
                 st.write("Please select the Stock continue")
                 st.stop()
             try:
                scrip = df2.loc[df2['Name of the Company'] == cos, 'NSE_Symbol'].item()
                market="NSE"
+               #print(scrip)
+               #scrip=None  #to test getting BSE Value
             except:
                scrip = None
             if pd.isna(scrip):
-            #if(scrip):
-                #st.write("nse is empty")
                 try:
                   scrip = df2.loc[df2['Name of the Company'] == cos, 'BSE_Symbol'].item()
                   market="BSE"
+                  print(scrip)
                 except:
                     st.write("unfortunately can't fulfill the request for given company, write to fetquest")
                     st.stop()
-            #st.write("Script is ",scrip)
             st.session_state["data"] = {"cos": cos, "scrip": scrip,"market":market}
             if(scrip):
                  st.switch_page("pages/1_AI_Stock_Screener.py")
-        #st.write(f"Stored in session: {st.session_state['selected_company']}")
-        st.write(f"List of companies in {select_column} Sector")
-        filtered_df = df1[[select_column]].replace("", pd.NA).dropna()
-        st.dataframe(filtered_df, use_container_width=True)
-    else:
-        st.warning("No companies available for this sector.")
 
-# def agent_ai_news(scrip):
-#       st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
-#       query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
-#       chunks = web_search_agent.run(query, stream=True)
-#       #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
-#       with st.container(border=True,height=400):    
-#            #st.write("Space for Agentic Container web " + scrip)
-#            #response = st.write_stream(filtered_chunks)
-#            response = st.write_stream(as_stream(chunks))
-# if select_column:
-#     agent_ai_news(select_column)
+    st.markdown(f'<h3 style="color:#FFFF00;">{selected_column} Sectoral Stocks</h3>', unsafe_allow_html=True)        
+    # Get unique values of the selected column
+    unique_values = df1[selected_column].dropna().unique()
+    
+    # Display unique values in AgGrid
+    #st.subheader(f"List of companies in {selected_column} Sector")
+    unique_df = pd.DataFrame({selected_column: unique_values})
+    
+    # Configure Grid Options
+    gb = GridOptionsBuilder.from_dataframe(unique_df)
+    gb.configure_default_column(width=200)
+    grid_options = gb.build()
+    
+    # Display AgGrid with reduced height
+    AgGrid(unique_df, gridOptions=grid_options, fit_columns_on_grid_load=True, height=300)
+
+def agent_ai_news(scrip):
+      st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
+      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+      chunks = web_search_agent.run(query, stream=True)
+      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
+      with st.container(border=True,height=400):    
+           #st.write("Space for Agentic Container web " + scrip)
+           #response = st.write_stream(filtered_chunks)
+           response = st.write_stream(as_stream(chunks))
+if selected_column:
+    agent_ai_news(selected_column)
