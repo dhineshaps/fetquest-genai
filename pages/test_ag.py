@@ -115,3 +115,15 @@ if selected_column:
     
     # Display AgGrid with reduced height
     AgGrid(unique_df, gridOptions=grid_options, fit_columns_on_grid_load=True, height=300)
+
+def agent_ai_news(scrip):
+      st.subheader(f":blue[ 💡 {scrip}  Sector Analysis] ", anchor=None,)
+      query = f"Provide a comprehensive analysis for {scrip+" Company"} for stock market research."
+      chunks = web_search_agent.run(query, stream=True)
+      #filtered_chunks = (chunk for i, chunk in enumerate(as_stream(chunks)) if i >= 2)
+      with st.container(border=True,height=400):    
+           #st.write("Space for Agentic Container web " + scrip)
+           #response = st.write_stream(filtered_chunks)
+           response = st.write_stream(as_stream(chunks))
+if selected_column:
+    agent_ai_news(selected_column)
