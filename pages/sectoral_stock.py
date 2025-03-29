@@ -56,7 +56,7 @@ st.markdown(footer,unsafe_allow_html=True)
 df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
 df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
-#conveerting bse symbols to Int from float
+#converting bse symbols to Int from float
 df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
 
 
