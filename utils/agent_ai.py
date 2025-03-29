@@ -26,6 +26,7 @@ web_search_agent = Agent(
     "For a given topic, search for the top 5 links.",
     "Then read each URL and extract the article text.",
     "Analyse and prepare 3-5 bullet points based on the information.",
+    "This is for Indian Stock Market and economy"
    ],
     show_tool_calls=True,
     markdown=True,
