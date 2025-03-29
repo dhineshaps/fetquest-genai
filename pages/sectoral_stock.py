@@ -73,7 +73,7 @@ selected_column = st.selectbox("Select a sector:", clm_name)
 if selected_column:
     filtered_values = df1[selected_column].replace("", pd.NA).dropna().tolist()
     if filtered_values:
-        selected_value = st.selectbox("Select a Company:", filtered_values,index=None,placeholder="ITC",)
+        selected_value = st.selectbox("Select a Company to Analysis Further based on below data:", filtered_values,index=None,placeholder="ITC",)
         val = st.button("Proceed",type="primary")
         if val:
             if(selected_value):
