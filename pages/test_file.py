@@ -68,8 +68,21 @@ if select_column:
 
 #print(df2)
 """
+try:
+    df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
+    df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+except FileNotFoundError as e:
+    st.error(f"Error loading data: {e}")
+    sys.exit()
+# df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce')
+# df2['BSE_Symbol'] = df2['BSE_Symbol'].fillna(0).astype(int)
+# # df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
+if "Unnamed: 0" in df1.columns:
+    df1 = df1.drop(columns=["Unnamed: 0"])
 
-df = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
+df1.index = range(1, len(df1) + 1)
+df1 = df1.fillna('')
+clm_name = df1.columns.tolist()
 
 st.subheader("Data Preview")
 #AgGrid(df)
