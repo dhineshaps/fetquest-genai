@@ -16,6 +16,7 @@ web_search_agent = Agent(
     name="Web Agent",
     description="Searches the web for information",
     role="Search the web as Equity Research Analyst ",
+    #model=Groq(id="llama-3.2-11b-vision-preview"),
     model=Groq(id="llama-3.2-11b-vision-preview"),
     tools=[
         DuckDuckGo(fixed_max_results=5),
@@ -37,7 +38,8 @@ finance_agent = Agent(
     name="Finance Agent",
     description="Provides financial insights",
     role="Providing financial insights",
-    model=Groq(id="llama-3.2-11b-vision-preview"),
+    #model=Groq(id="llama-3.2-11b-vision-preview"),
+    model=Groq(id="meta-llama/llama-4-scout-17b-16e-instruct"),
     tools=[YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True,
                          company_news=True, historical_prices=True)],
     instructions=["Provide detailed analysis"],
@@ -49,7 +51,7 @@ finance_agent = Agent(
 multi_ai_agent = Agent(
     name='A Stock Market Agent',
     role='A comprehensive assistant specializing in stock market analysis',
-    model=Groq(id="llama-3.2-11b-vision-preview"),
+    model=Groq(id="meta-llama/llama-4-scout-17b-16e-instruct"),
     team=[web_search_agent, finance_agent],
     instructions=["Provide comprehensive analysis with multiple data sources"],
     show_tool_calls=True,
