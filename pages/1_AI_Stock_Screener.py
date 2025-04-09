@@ -11,6 +11,7 @@ from datetime import date
 #from jugaad_data.nse import stock_df
 from datetime import datetime
 from datetime import timedelta
+from streamlit_gsheets import GSheetsConnection
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 im = Image.open('the-fet-quest.jpg')
@@ -73,7 +74,14 @@ LTP = []
 
 #data needs to be handled by multiple ways and compared with latest NSE data
 #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
-df = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv") 
+#df = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+df = conn.read(
+    worksheet="All_Stocks_Data"
+)
+
 col_one_list = df['Name of the Company'].tolist()
 
 

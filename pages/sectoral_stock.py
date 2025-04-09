@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 from st_aggrid import AgGrid,GridOptionsBuilder
+from streamlit_gsheets import GSheetsConnection
 
     
 from PIL import Image
@@ -53,8 +54,18 @@ text-align: center;
 st.markdown(footer,unsafe_allow_html=True)
 
 
-df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
-df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+# df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
+# df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
+
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+df1 = conn.read(
+    worksheet="sectoral_data_companies",index_col=0
+)
+
+df2 = conn.read(
+    worksheet="All_Stocks_Data"
+)
 
 #converting bse symbols to Int from float
 df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
