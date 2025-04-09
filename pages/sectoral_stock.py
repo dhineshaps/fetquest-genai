@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 from st_aggrid import AgGrid,GridOptionsBuilder
+from streamlit_gsheets import GSheetsConnection
 
     
 from PIL import Image
@@ -57,7 +58,7 @@ st.markdown(footer,unsafe_allow_html=True)
 # df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
 df1 = conn.read(
-    worksheet="sectoral_data_companies"
+    worksheet="sectoral_data_companies",index_col=0
 )
 
 df2 = conn.read(
