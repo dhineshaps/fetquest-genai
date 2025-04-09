@@ -57,6 +57,8 @@ st.markdown(footer,unsafe_allow_html=True)
 # df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
 # df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
+conn = st.connection("gsheets", type=GSheetsConnection)
+
 df1 = conn.read(
     worksheet="sectoral_data_companies",index_col=0
 )
