@@ -57,7 +57,7 @@ st.markdown(footer,unsafe_allow_html=True)
 # df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
 df1 = conn.read(
-    worksheet="sectoral_data_companies",index_col=0
+    worksheet="sectoral_data_companies"
 )
 
 df2 = conn.read(
