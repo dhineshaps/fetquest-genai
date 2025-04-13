@@ -74,7 +74,7 @@ url = st.secrets["supabase"]["url"]
 key = st.secrets["supabase"]["key"]
 supabase: Client = create_client(url, key)
 
-response = supabase.table("sectoral_data_companies3").select("*").execute()
+response = supabase.table("sectoral_data_companies").select("*").execute()
 data = response.data
 
 df = pd.DataFrame(data)
