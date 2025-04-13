@@ -25,3 +25,4 @@ python-dotenv
 langchain
 PyPDF2
 st-gsheets-connection
+supabase
