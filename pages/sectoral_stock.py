@@ -74,6 +74,9 @@ url = st.secrets["supabase"]["url"]
 key = st.secrets["supabase"]["key"]
 supabase: Client = create_client(url, key)
 
+response = supabase.table("sectoral_data_companies3").select("*").execute()
+data = response.data
+
 df = pd.DataFrame(data)
 
 pivot_df = df.groupby("industry")["company"].apply(list).to_dict()
