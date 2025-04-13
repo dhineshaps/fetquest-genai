@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 from st_aggrid import AgGrid,GridOptionsBuilder
 from streamlit_gsheets import GSheetsConnection
+from supabase import create_client, Client
 
     
 from PIL import Image
@@ -57,15 +58,38 @@ st.markdown(footer,unsafe_allow_html=True)
 # df1 = pd.read_csv("/mount/src/fetquest-genai/sectoral_data_companies.csv", index_col=0)
 # df2 = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+# conn = st.connection("gsheets", type=GSheetsConnection)
 
-df1 = conn.read(
-    worksheet="sectoral_data_companies",index_col=0
-)
+# df1 = conn.read(
+#     worksheet="sectoral_data_companies",index_col=0
+# )
 
-df2 = conn.read(
-    worksheet="All_Stocks_Data"
-)
+# df2 = conn.read(
+#     worksheet="All_Stocks_Data"
+# )
+
+
+########################################Supabase Database Connection for sectoral ##########################################
+url = st.secrets["supabase"]["url"]
+key = st.secrets["supabase"]["key"]
+supabase: Client = create_client(url, key)
+
+df = pd.DataFrame(data)
+
+pivot_df = df.groupby("industry")["company"].apply(list).to_dict()
+max_len = max(len(companies) for companies in pivot_df.values())
+normalized = {k: v + [None]*(max_len - len(v)) for k, v in pivot_df.items()}
+
+df1 = pd.DataFrame(normalized)
+
+########################################Supabase Database Connection for All Stock ##########################################
+
+response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
+data_all_Stock_data= response_all_stock_data.data
+
+df2 = pd.DataFrame(data_all_Stock_data)
+
+##############################################################################################################################
 
 #converting bse symbols to Int from float
 df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)

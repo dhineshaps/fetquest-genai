@@ -12,6 +12,7 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from streamlit_gsheets import GSheetsConnection
+from supabase import create_client, Client
 from utils.agent_ai import finance_agent,multi_ai_agent,web_search_agent, as_stream
 
 im = Image.open('the-fet-quest.jpg')
@@ -76,12 +77,25 @@ LTP = []
 #data is taken from NSE https://www.nseindia.com/market-data/securities-available-for-trading
 #df = pd.read_csv("/mount/src/fetquest-genai/All_Stocks_Data.csv")
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+# conn = st.connection("gsheets", type=GSheetsConnection)
 
-df = conn.read(
-    worksheet="All_Stocks_Data"
-)
+# df = conn.read(
+#     worksheet="All_Stocks_Data"
+# )
 
+
+############################Supabase Db Connection###################################
+url = st.secrets["supabase"]["url"]
+key = st.secrets["supabase"]["key"]
+
+supabase: Client = create_client(url, key)
+                                 
+response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
+data_all_Stock_data= response_all_stock_data.data
+
+df = pd.DataFrame(data_all_Stock_data)
+
+######################################################################################
 col_one_list = df['Name of the Company'].tolist()
 
 
