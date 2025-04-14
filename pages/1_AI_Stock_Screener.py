@@ -90,12 +90,14 @@ key = st.secrets["supabase"]["key"]
 
 supabase: Client = create_client(url, key)
                                  
-response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
-data_all_Stock_data= response_all_stock_data.data
-
-df = pd.DataFrame(data_all_Stock_data)
+@st.cache_data(ttl=3600)
+def load_all_stock_data():
+    response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
+    data_all_stock_data = response_all_stock_data.data
+    return pd.DataFrame(data_all_stock_data)
 
 ######################################################################################
+df = load_all_stock_data()
 col_one_list = df['Name of the Company'].tolist()
 
 
