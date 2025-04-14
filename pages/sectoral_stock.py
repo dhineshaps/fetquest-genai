@@ -74,28 +74,31 @@ url = st.secrets["supabase"]["url"]
 key = st.secrets["supabase"]["key"]
 supabase: Client = create_client(url, key)
 
-response = supabase.table("sectoral_data_companies").select("*").execute()
-data = response.data
+@st.cache_data(ttl=3600)
+def load_sectoral_data():
+    response = supabase.table("sectoral_data_companies").select("*").execute()
+    data = response.data
 
-df = pd.DataFrame(data)
+    df = pd.DataFrame(data)
+    pivot_df = df.groupby("industry")["company"].apply(list).to_dict()
+    max_len = max(len(companies) for companies in pivot_df.values())
+    normalized = {k: v + [None]*(max_len - len(v)) for k, v in pivot_df.items()}
 
-pivot_df = df.groupby("industry")["company"].apply(list).to_dict()
-max_len = max(len(companies) for companies in pivot_df.values())
-normalized = {k: v + [None]*(max_len - len(v)) for k, v in pivot_df.items()}
+    return pd.DataFrame(normalized)  # ← fixed typo here
 
-df1 = pd.DataFrame(normalized)
+@st.cache_data(ttl=3600)
+def load_all_stock_data():
+    response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
+    data_all_stock_data = response_all_stock_data.data
 
-########################################Supabase Database Connection for All Stock ##########################################
+    df = pd.DataFrame(data_all_stock_data)
+    df['BSE_Symbol'] = pd.to_numeric(df['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
+    return df
 
-response_all_stock_data = supabase.table("All_Stock_Data").select("*").execute()
-data_all_Stock_data= response_all_stock_data.data
-
-df2 = pd.DataFrame(data_all_Stock_data)
-
-##############################################################################################################################
-
-#converting bse symbols to Int from float
-df2['BSE_Symbol'] = pd.to_numeric(df2['BSE_Symbol'], errors='coerce').fillna(0).astype(int)
+##################################################################################################
+# Use the cached data
+df1 = load_sectoral_data()
+df2 = load_all_stock_data()
 
 
 if "Unnamed: 0" in df1.columns:
