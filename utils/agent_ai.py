@@ -17,7 +17,7 @@ web_search_agent = Agent(
     description="Searches the web for information",
     role="Search the web as Equity Research Analyst ",
     #model=Groq(id="llama-3.2-11b-vision-preview"),
-    model=Groq(id="llama-3.2-11b-vision-preview"),
+    model=Groq(id="meta-llama/llama-4-scout-17b-16e-instruct"),
     tools=[
         DuckDuckGo(fixed_max_results=5),
         GoogleSearch(fixed_language='english', fixed_max_results=5)
