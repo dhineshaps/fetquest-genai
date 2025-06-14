@@ -514,9 +514,9 @@ def main_flow(SCRIP):
         #print(pr_hld)
         #print("Quater is "+qtr)
         #print(sales)
-        stock_pe = yf.Ticker(scrip+".NS")   #Added P/E from yfinance
+        stock_pe = yf.Ticker(SCRIP+".NS")   #Added P/E from yfinance
         pe = stock_pe.info.get("trailingPE")
-        PE = round(pe,2) #Added P/E from yfinance
+        PE = round(pe, 2) if pe is not None else "N/A"
         div_html = soup.find('div',{'class': 'company-ratios'})
         ul_html = div_html.find('ul',{'id': 'top-ratios'})
         for li in ul_html.find_all("li"):
