@@ -515,7 +515,7 @@ def main_flow(SCRIP):
         #print("Quater is "+qtr)
         #print(sales)
         stock_pe = yf.Ticker(scrip+".NS")   #Added P/E from yfinance
-        pe = stock.info.get("trailingPE")
+        pe = stock_pe.info.get("trailingPE")
         PE = round(pe,2) #Added P/E from yfinance
         div_html = soup.find('div',{'class': 'company-ratios'})
         ul_html = div_html.find('ul',{'id': 'top-ratios'})
