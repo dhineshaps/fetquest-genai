@@ -514,6 +514,9 @@ def main_flow(SCRIP):
         #print(pr_hld)
         #print("Quater is "+qtr)
         #print(sales)
+        stock_pe = yf.Ticker(scrip+".NS")   #Added P/E from yfinance
+        pe = stock.info.get("trailingPE")
+        PE = round(pe,2 #Added P/E from yfinance
         div_html = soup.find('div',{'class': 'company-ratios'})
         ul_html = div_html.find('ul',{'id': 'top-ratios'})
         for li in ul_html.find_all("li"):
@@ -526,10 +529,10 @@ def main_flow(SCRIP):
                 num_span = li.find('span',{'class':'number'})
                 num_span = num_span.text.replace(',', '')
                 cmp = float(num_span) if (num_span != '') else 0.0
-            if ' Stock P/E' in name_span.text: 
-                num_span = li.find('span',{'class':'number'})
-                num_span = num_span.text.replace(',', '')
-                PE = float(num_span) if (num_span != '') else 0.0
+            # if ' Stock P/E' in name_span.text: 
+            #     num_span = li.find('span',{'class':'number'})
+            #     num_span = num_span.text.replace(',', '')
+            #     PE = float(num_span) if (num_span != '') else 0.0
             if ' Book Value' in name_span.text: 
                 num_span = li.find('span',{'class':'number'})
                 num_span = num_span.text.replace(',', '')
