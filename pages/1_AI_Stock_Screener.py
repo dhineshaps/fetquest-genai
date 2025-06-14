@@ -538,13 +538,9 @@ def main_flow(SCRIP):
 
         div_html1 = soup.find('div',{'class': 'flex flex-space-between'})
         ul_html1 = div_html1.find('p')
-        for idx, x in enumerate (ul_html1):
-            if(idx == 1):
-                for i in x:
-                    sector = i
-            if(idx == 5):
-                for i in x:
-                    industry = i 
+        all_links = ul_html1.find_all('a')
+        sector = all_links[-1].get_text(strip=True)
+
         #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
         output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector)
         #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
