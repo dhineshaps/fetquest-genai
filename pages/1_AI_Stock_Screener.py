@@ -278,7 +278,7 @@ def opm_nums(soup):
      print(num_row)
      return num_row, qtrs
 
-def output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector):
+def output_stock_data(market_cap,cmp,PE,BV,PB_Ratio):
     c1, c2, c3 = st.columns(3)
     with c1:
          st.write(f':orange[Current Market price -] {cmp} Rs')
@@ -546,7 +546,8 @@ def main_flow(SCRIP):
                 for i in x:
                     industry = i 
         #output_display(pr_hld,qtr,sales,qtrs,eps,qtrss,ltpv,opm,qts)
-        output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector)
+        #output_stock_data(market_cap,cmp,PE,BV,PB_Ratio,sector)  #need to check why sector not populating
+        output_stock_data(market_cap,cmp,PE,BV,PB_Ratio)
         #output_display(pr_hld,qtr,sales,qtrs,opm,qts)
         st.info('AI-powered insights are from complimentary models and Public APIs, please Refresh if the data is not proper', icon="💬")
         if(market=="NSE"):
